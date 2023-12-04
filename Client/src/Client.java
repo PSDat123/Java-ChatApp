@@ -39,7 +39,7 @@ public class Client implements Runnable {
             if (!client.isClosed()) {
                 client.close();
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             // ignore
         }
     }
@@ -49,7 +49,7 @@ public class Client implements Runnable {
             try {
                 BufferedReader inReader = new BufferedReader(new InputStreamReader(System.in));
                 while (!done) {
-                    String msg = inReader.readLine();;
+                    String msg = inReader.readLine();
                     if (msg.equals("/quit")) {
                         out.println(msg);
                         inReader.close();
