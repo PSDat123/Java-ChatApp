@@ -18,21 +18,47 @@ public class Client implements Runnable {
             out = new PrintWriter(client.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 
-            InputHandler inHandler = new InputHandler();
-            Thread t = new Thread(inHandler);
-            t.start();
+//            InputHandler inHandler = new InputHandler();
+//            Thread t = new Thread(inHandler);
+//            t.start();
 
-            String inMessage;
-            while ((inMessage = in.readLine()) != null) {
-                System.out.println(inMessage);
+            String inMsg;
+            while ((inMsg = in.readLine()) != null) {
+                if (inMsg.startsWith("/register_error")) {
+                    String[] split = inMsg.split(" ", 2);
+                    if (split.length == 2) {
+                        Main.authScreen.setRegisterAlert(split[1], "error");
+                    }
+                }
+                else if (inMsg.startsWith("/register_success")) {
+                    String[] split = inMsg.split(" ", 2);
+                    if (split.length == 2) {
+                        Main.authScreen.setRegisterAlert(split[1], "success");
+                    }
+                }
+                else if (inMsg.startsWith("/login_error")) {
+                    String[] split = inMsg.split(" ", 2);
+                    if (split.length == 2) {
+                        Main.authScreen.setLoginAlert(split[1], "error");
+                    }
+                }
+                else if (inMsg.startsWith("/login_success")) {
+                    String[] split = inMsg.split(" ", 2);
+                    if (split.length == 2) {
+                        Main.authScreen.setLoginAlert(split[1], "success");
+                    }
+                }
+                System.out.println(inMsg);
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             shutdown();
         }
+        System.out.println("SHUT DOWNED!");
     }
 
     public void shutdown() {
         try {
+            System.out.println("Closing...");
             done = true;
             in.close();
             out.close();
@@ -42,31 +68,38 @@ public class Client implements Runnable {
         } catch (Exception e) {
             // ignore
         }
+        System.out.println("Closed");
     }
-    class InputHandler implements Runnable {
-        @Override
-        public void run() {
-            try {
-                BufferedReader inReader = new BufferedReader(new InputStreamReader(System.in));
-                while (!done) {
-                    String msg = inReader.readLine();
-                    if (msg.equals("/quit")) {
-                        out.println(msg);
-                        inReader.close();
-                        shutdown();
-                    }
-                    else {
-                        out.println(msg);
-                    }
-                }
-            } catch (IOException e) {
-                shutdown();
-            }
+
+    public void sendLine(String msg) {
+        try {
+            out.println(msg);
+        } catch (Exception e) {
+            System.err.println(e);
+            shutdown();
         }
     }
-    public static void main(String[] args) {
-        Client cl = new Client();
-        cl.run();
-    }
+//    class InputHandler implements Runnable {
+//        @Override
+//        public void run() {
+//            try {
+//                BufferedReader inReader = new BufferedReader(new InputStreamReader(System.in));
+//                while (!done) {
+//                    String msg = inReader.readLine();
+//                    if (msg.equals("/quit")) {
+//                        out.println(msg);
+//                        inReader.close();
+//                        shutdown();
+//                    }
+//                    else {
+//                        out.println(msg);
+//                    }
+//                }
+//            } catch (IOException e) {
+//                shutdown();
+//            }
+//        }
+//    }
+//
 
 }

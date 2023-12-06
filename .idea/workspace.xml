@@ -4,8 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="34fb2b9e-1627-4655-80a7-c0f759108fae" name="Changes" comment="feat: Add basic server and client template">
+    <list default="true" id="34fb2b9e-1627-4655-80a7-c0f759108fae" name="Changes" comment="chore: fix minor issue and add workspace.xml">
+      <change afterPath="$PROJECT_DIR$/Client/src/AuthScreen.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Client/src/ChatScreen.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Client/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/Client.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/src/ConnectionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/ConnectionHandler.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,9 +28,12 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 3
-}]]></component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 3
+}</component>
   <component name="ProjectId" id="2Z4xxFBVEeqKe1e3wC0p6CZy0Lj" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
@@ -36,27 +45,26 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "master",
     "jdk.selected.JAVA_MODULE": "18",
     "last_opened_file_path": "C:/Users/LENOVO/Uni/Nam 3/HK1/Java/Project/ChatApp",
     "onboarding.tips.debug.path": "C:/Users/LENOVO/Uni/Nam 3/HK1/Java/Project/ChatApp/Client/src/Main.java",
-    "project.structure.last.edited": "Modules",
+    "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
     "run.code.analysis.last.selected.profile": "pProject Default",
     "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings"
   }
 }]]></component>
-  <component name="RunManager" selected="Application.Client2">
+  <component name="RunManager" selected="Application.Client1">
     <configuration name="Client1" type="Application" factoryName="Application" temporary="true">
-      <option name="MAIN_CLASS_NAME" value="Client" />
+      <option name="MAIN_CLASS_NAME" value="Main" />
       <module name="Client" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <configuration name="Client2" type="Application" factoryName="Application">
-      <option name="MAIN_CLASS_NAME" value="Client" />
+      <option name="MAIN_CLASS_NAME" value="Main" />
       <module name="Client" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -65,6 +73,19 @@
     <configuration name="Server" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="Server" />
       <module name="Server" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="Server" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="Server" />
+      <option name="filePath" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -97,12 +118,21 @@
       <option name="project" value="LOCAL" />
       <updated>1701705594777</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="chore: fix minor issue and add workspace.xml">
+      <option name="closed" value="true" />
+      <created>1701706472921</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1701706472921</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="feat: Add basic server and client template" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: Add basic server and client template" />
+    <MESSAGE value="chore: fix minor issue and add workspace.xml" />
+    <option name="LAST_COMMIT_MESSAGE" value="chore: fix minor issue and add workspace.xml" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

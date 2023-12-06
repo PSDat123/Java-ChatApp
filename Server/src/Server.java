@@ -55,6 +55,11 @@ public class Server implements Runnable {
     }
 
     public static void main(String[] args) {
+        try {
+            Auth.init();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         Server server = new Server(8080);
         server.run();
     }
