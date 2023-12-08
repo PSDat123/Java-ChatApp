@@ -4,15 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="34fb2b9e-1627-4655-80a7-c0f759108fae" name="Changes" comment="chore: fix minor issue and add workspace.xml">
-      <change afterPath="$PROJECT_DIR$/Client/src/AuthScreen.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Client/src/ChatScreen.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Client/src/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/Client.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/src/ConnectionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/ConnectionHandler.java" afterDir="false" />
-    </list>
+    <list default="true" id="9257d912-54ef-45cf-9adf-632de24b544d" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -25,121 +17,115 @@
       </list>
     </option>
   </component>
-  <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-  </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
+    <option name="selectedTabId" value="QODANA_PROBLEMS_VIEW_TAB" />
   </component>
   <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 3
 }</component>
-  <component name="ProjectId" id="2Z4xxFBVEeqKe1e3wC0p6CZy0Lj" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectId" id="2Z9HzKdSWstoUCdZrjgJWdNHm0x" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "jdk.selected.JAVA_MODULE": "18",
-    "last_opened_file_path": "C:/Users/LENOVO/Uni/Nam 3/HK1/Java/Project/ChatApp",
-    "onboarding.tips.debug.path": "C:/Users/LENOVO/Uni/Nam 3/HK1/Java/Project/ChatApp/Client/src/Main.java",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "run.code.analysis.last.selected.profile": "pProject Default",
-    "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;18&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/LENOVO/Uni/Nam 3/HK1/Java/Project/ChatApp/Server&quot;,
+    &quot;onboarding.tips.debug.path&quot;: &quot;C:/Users/LENOVO/Uni/Nam 3/HK1/Java/Project/ChatApp/Client/src/main/java/org/example/Main.java&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Artifacts&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.project.maven.importing&quot;
   }
-}]]></component>
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\LENOVO\Uni\Nam 3\HK1\Java\Project\ChatApp\Client" />
+      <recent name="C:\Users\LENOVO\Uni\Nam 3\HK1\Java\Project\ChatApp\Server" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\LENOVO\Uni\Nam 3\HK1\Java\Project\ChatApp\Server\src\main\resources" />
+      <recent name="C:\Users\LENOVO\Uni\Nam 3\HK1\Java\Project\ChatApp\Server\src\main\java" />
+    </key>
+  </component>
   <component name="RunManager" selected="Application.Client1">
-    <configuration name="Client1" type="Application" factoryName="Application" temporary="true">
-      <option name="MAIN_CLASS_NAME" value="Main" />
+    <configuration name="Client1" type="Application" factoryName="Application">
+      <option name="ALTERNATIVE_JRE_PATH" value="18" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="MAIN_CLASS_NAME" value="org.client.Main" />
       <module name="Client" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <configuration name="Client2" type="Application" factoryName="Application">
-      <option name="MAIN_CLASS_NAME" value="Main" />
+      <option name="MAIN_CLASS_NAME" value="org.client.Main" />
       <module name="Client" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Server" type="Application" factoryName="Application">
-      <option name="MAIN_CLASS_NAME" value="Server" />
-      <module name="Server" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="JetRunConfigurationType">
-      <module name="Server" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
-      <module name="Server" />
-      <option name="filePath" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
+    <configuration name="Server [compile,exec:java...]" type="MavenRunConfiguration" factoryName="Maven" nameIsGenerated="true">
+      <MavenSettings>
+        <option name="myGeneralSettings" />
+        <option name="myRunnerSettings" />
+        <option name="myRunnerParameters">
+          <MavenRunnerParameters>
+            <option name="cmdOptions" />
+            <option name="profiles">
+              <set />
+            </option>
+            <option name="goals">
+              <list>
+                <option value="compile" />
+                <option value="exec:java" />
+                <option value="-Dexec.mainClass=org.server.Server" />
+              </list>
+            </option>
+            <option name="pomFileName" />
+            <option name="profilesMap">
+              <map />
+            </option>
+            <option name="projectsCmdOptionValues">
+              <list />
+            </option>
+            <option name="resolveToWorkspace" value="false" />
+            <option name="workingDirPath" value="$PROJECT_DIR$/Server" />
+          </MavenRunnerParameters>
+        </option>
+      </MavenSettings>
+      <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Application.Server" />
-      <item itemvalue="Application.Client2" />
       <item itemvalue="Application.Client1" />
+      <item itemvalue="Application.Client2" />
+      <item itemvalue="Maven.Server [compile,exec:java...]" />
     </list>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Application.Client1" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="34fb2b9e-1627-4655-80a7-c0f759108fae" name="Changes" comment="" />
-      <created>1701695399379</created>
+      <changelist id="9257d912-54ef-45cf-9adf-632de24b544d" name="Changes" comment="" />
+      <created>1701827637747</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1701695399379</updated>
+      <updated>1701827637747</updated>
     </task>
-    <task id="LOCAL-00001" summary="feat: Add basic server and client template">
-      <option name="closed" value="true" />
-      <created>1701705594777</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1701705594777</updated>
-    </task>
-    <task id="LOCAL-00002" summary="chore: fix minor issue and add workspace.xml">
-      <option name="closed" value="true" />
-      <created>1701706472921</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1701706472921</updated>
-    </task>
-    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
-  <component name="VcsManagerConfiguration">
-    <MESSAGE value="feat: Add basic server and client template" />
-    <MESSAGE value="chore: fix minor issue and add workspace.xml" />
-    <option name="LAST_COMMIT_MESSAGE" value="chore: fix minor issue and add workspace.xml" />
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName=".env" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/Main.java</url>
-          <line>13</line>
+          <url>file://$PROJECT_DIR$/src/main/java/org/example/Main.java</url>
+          <line>15</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
       </breakpoints>

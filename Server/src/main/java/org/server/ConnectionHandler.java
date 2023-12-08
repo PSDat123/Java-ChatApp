@@ -1,9 +1,13 @@
+package org.server;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class ConnectionHandler implements Runnable {
     private Client client;
@@ -35,13 +39,14 @@ public class ConnectionHandler implements Runnable {
                         String username = this.recvLine().strip();
                         String password = this.recvLine().strip();
                         try {
-                            boolean success = Auth.login(username, password);
+                            boolean success = Database.loginUser(username, password);
                             if (!success) {
                                 this.sendLine("/login_error Tên đăng nhập hoặc mật khẩu sai!");
                             }
                             else {
-                                this.sendLine("/login_success Đăng nhập thàng công!");
                                 client.setUsername(username);
+                                this.sendLine("/login_success " + username);
+                                Server.broadcast("/user_online " + username);
 //                                client.setPassword(password);
                             }
                         } catch (NoSuchAlgorithmException e) {
@@ -53,21 +58,58 @@ public class ConnectionHandler implements Runnable {
                         String username = this.recvLine().strip();
                         String password = this.recvLine().strip();
                         try {
-                            boolean success = Auth.register(username, password);
+                            boolean success = Database.registerUser(username, password);
                             if (!success) {
                                 this.sendLine("/register_error Tên đăng nhập đã tồn tại!");
                             }
                             else {
                                 this.sendLine("/register_success Đăng kí thành công, hãy đăng nhập!");
                             }
-                        } catch (IOException | NoSuchAlgorithmException e) {
+                        } catch (NoSuchAlgorithmException e) {
                             this.sendLine("/register_error Tên đăng nhập đã tồn tại!");
                         }
                         break;
                     }
                     case "/chat": {
-                        String to = this.recvLine();
-                        String content = this.recvLine();
+                        String to = this.recvLine().strip();
+                        String content = this.recvLine().strip();
+                        for (ConnectionHandler ch : Server.connections) {
+                            if (ch.client.getUsername().equals(to)) {
+                                ch.sendLine("/message_from");
+                                ch.sendLine(this.client.getUsername());
+                                ch.sendLine(content);
+                            }
+                        }
+                        if(!Database.saveChat(client.getUsername(), to, content)) {
+                            sendLine("/error_chat can't save chat!");
+                        }
+                        else {
+                            sendLine("/chat_success");
+                        }
+                        break;
+                    }
+                    case "/get_users": {
+                        ArrayList<String> userList = Database.getAllUser();
+                        this.sendLine("/user_list");
+                        this.sendLine(Integer.toString(userList.size()));
+                        for (String username : userList) {
+                            this.sendLine(username);
+                        }
+                        break;
+                    }
+                    case "/get_chat_log_from": {
+                        String username = this.recvLine().strip();
+                        ArrayList<ArrayList<String>> logs = Database.getChatLog(client.getUsername(), username);
+                        if (logs != null && !logs.isEmpty()) {
+                            this.sendLine("/chat_log");
+                            this.sendLine(username);
+                            this.sendLine(Integer.toString(logs.size()));
+                            for (ArrayList<String> log : logs) {
+                                this.sendLine(log.get(0));
+                                this.sendLine(log.get(1));
+                            }
+                        }
+                        break;
                     }
                 }
 //                if (msg.startsWith("/quit")) {
@@ -97,8 +139,13 @@ public class ConnectionHandler implements Runnable {
             if (!client.getSocket().isClosed()) {
                 client.getSocket().close();
             }
+            Server.connections.remove(this);
         } catch (IOException e) {
             // ignore
         }
+    }
+
+    public Client getClient() {
+        return client;
     }
 }

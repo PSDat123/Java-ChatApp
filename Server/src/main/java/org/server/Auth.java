@@ -1,11 +1,12 @@
+package org.server;
+
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
-import java.util.HashMap;
+import java.util.*;
 
 public class Auth {
     private static final String DATA_FOLDER = "./data";
@@ -65,5 +66,8 @@ public class Auth {
             hexString.append(hex);
         }
         return hexString.toString();
+    }
+    public static ArrayList<String> getUsers() {
+        return new ArrayList<>(users.keySet());
     }
 }
