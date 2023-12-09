@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -23,6 +24,7 @@ public class Server implements Runnable {
         try {
             server = new ServerSocket(port);
             pool = Executors.newCachedThreadPool();
+            System.out.println("Listening on port 8080");
             while (!done) {
                 Socket client = server.accept();
                 ConnectionHandler handler = new ConnectionHandler(client);
@@ -37,6 +39,13 @@ public class Server implements Runnable {
     public static void broadcast(String msg) {
         for (ConnectionHandler ch : connections) {
             if (ch != null && ch.getClient().getUsername() != null) {
+                ch.sendLine(msg);
+            }
+        }
+    }
+    public static void broadcast(String msg, String except) {
+        for (ConnectionHandler ch : connections) {
+            if (ch != null && ch.getClient().getUsername() != null && !Objects.equals(ch.getClient().getUsername(), except)) {
                 ch.sendLine(msg);
             }
         }
@@ -59,7 +68,6 @@ public class Server implements Runnable {
 
     public static void main(String[] args) {
         try {
-            Auth.init();
             Database.init();
         } catch (Exception e) {
             throw new RuntimeException(e);

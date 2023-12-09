@@ -14,11 +14,11 @@ public class User extends JButton {
     public String username;
     public ArrayList<ArrayList<String>> chatLog;
     public User(String username) {
-        super();
+        super(username);
         this.chatLog = new ArrayList<>();
         this.username = username;
-        this.setText(username);
-
+        this.setContentAreaFilled(false);
+        this.setBackground(ChatScreen.OFFLINE);
         addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -43,5 +43,19 @@ public class User extends JButton {
     }
     public ArrayList<ArrayList<String>> getChatLog() {
         return chatLog;
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        final Graphics2D g2 = (Graphics2D) g.create();
+        g2.setPaint(new GradientPaint(
+                new Point(0, 0),
+                Color.WHITE,
+                new Point(0, getHeight()),
+                getBackground()));
+        g2.fillRect(0, 0, getWidth(), getHeight());
+        g2.dispose();
+
+        super.paintComponent(g);
     }
 }

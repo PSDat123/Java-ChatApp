@@ -6,16 +6,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Arrays;
 import java.util.Objects;
 
 public class AuthScreen extends JFrame implements ActionListener {
     private JTabbedPane tabbedPane;
     private JTextField loginUsernameField;
-    private JTextField loginPasswordField;
+    private JPasswordField loginPasswordField;
     private JButton loginBtn;
     private JLabel loginAlert;
     private JTextField registerUsernameField;
-    private JTextField registerPasswordField;
+    private JPasswordField registerPasswordField;
     private JButton registerBtn;
     private JLabel registerAlert;
     public AuthScreen() {
@@ -30,7 +31,7 @@ public class AuthScreen extends JFrame implements ActionListener {
         loginUsernameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         loginPasswordLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         loginUsernameField = new JTextField(15);
-        loginPasswordField = new JTextField(15);
+        loginPasswordField = new JPasswordField(15);
         loginUsernameField.setMaximumSize(loginUsernameField.getPreferredSize());
         loginPasswordField.setMaximumSize(loginPasswordField.getPreferredSize());
 
@@ -61,7 +62,7 @@ public class AuthScreen extends JFrame implements ActionListener {
         registerUsernameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         registerPasswordLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         registerUsernameField = new JTextField(15);
-        registerPasswordField = new JTextField(15);
+        registerPasswordField = new JPasswordField(15);
         registerUsernameField.setMaximumSize(registerUsernameField.getPreferredSize());
         registerPasswordField.setMaximumSize(registerPasswordField.getPreferredSize());
 
@@ -111,7 +112,7 @@ public class AuthScreen extends JFrame implements ActionListener {
         switch (e.getActionCommand()) {
             case "login": {
                 String username = loginUsernameField.getText();
-                String password = loginPasswordField.getText();
+                String password = new String(loginPasswordField.getPassword());
                 Main.client.sendLine("/login");
                 Main.client.sendLine(username);
                 Main.client.sendLine(password);
@@ -119,7 +120,7 @@ public class AuthScreen extends JFrame implements ActionListener {
             }
             case "register": {
                 String username = registerUsernameField.getText();
-                String password = registerPasswordField.getText();
+                String password = new String(registerPasswordField.getPassword());
                 Main.client.sendLine("/register");
                 Main.client.sendLine(username);
                 Main.client.sendLine(password);

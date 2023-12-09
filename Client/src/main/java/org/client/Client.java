@@ -51,10 +51,13 @@ public class Client implements Runnable {
                     String[] split = inMsg.split(" ", 2);
                     if (split.length == 2) {
 //                        Main.authScreen.setLoginAlert(split[1], "success");
-                        Main.authScreen.dispose();
-                        Main.authScreen.setVisible(false);
-                        Main.chatScreen = new ChatScreen();
-                        Main.chatScreen.setUsername(split[1]);
+                        if (Main.chatScreen == null) {
+                            Main.authScreen.dispose();
+                            Main.authScreen.setVisible(false);
+                            Main.authScreen = null;
+                            Main.chatScreen = new ChatScreen();
+                            Main.chatScreen.setUsername(split[1]);
+                        }
                     }
                 }
                 else if (inMsg.startsWith("/user_list")) {
@@ -64,6 +67,13 @@ public class Client implements Runnable {
                         users.add(in.readLine().strip());
                     }
                     Main.chatScreen.updateUserList(users);
+                    this.sendLine("/get_online_users");
+                }
+                else if (inMsg.startsWith("/online_user_list")) {
+                    int n = Integer.parseInt(in.readLine().strip());
+                    for (int i = 0; i < n; ++i) {
+                        Main.chatScreen.activateUser(in.readLine().strip());
+                    }
                 }
                 else if (inMsg.startsWith("/user_online")) {
                     String[] split = inMsg.split(" ", 2);
@@ -71,19 +81,23 @@ public class Client implements Runnable {
                         Main.chatScreen.activateUser(split[1]);
                     }
                 }
+                else if (inMsg.startsWith("/user_offline")) {
+                    String[] split = inMsg.split(" ", 2);
+                    if (split.length == 2 && !split[1].equals(Main.chatScreen.getUsername())) {
+                        Main.chatScreen.deactivateUser(split[1]);
+                    }
+                }
                 else if (inMsg.startsWith("/message_from")) {
                     String username = in.readLine().strip();
                     String content = in.readLine().strip();
-                    System.out.println("WTF");
 
                     User user = Main.chatScreen.getUserComp(username);
                     if (user != null) {
                         user.addToChatLog(username, content);
                         if (username.equals(Main.chatScreen.getCurrentChatUser())) {
-                            Main.chatScreen.updateMsgList();
+                            Main.chatScreen.addMessage(username, content);
                         }
                     }
-
                 }
                 else if (inMsg.startsWith("/chat_log")) {
                     String username = in.readLine().strip();
@@ -95,13 +109,22 @@ public class Client implements Runnable {
                             String content = in.readLine().strip();
                             user.addToChatLog(from, content);
                         }
+
                         if (username.equals(Main.chatScreen.getCurrentChatUser())) {
                             Main.chatScreen.updateMsgList();
                         }
                     }
                 }
                 else if (inMsg.startsWith("/chat_success")) {
-                    Main.chatScreen.updateMsgList();
+                    String username = in.readLine().strip();
+                    String content = in.readLine().strip();
+                    Main.chatScreen.addMessage(username, content);
+                }
+                else if (inMsg.startsWith("/new_user")) {
+                    String[] split = inMsg.split(" ", 2);
+                    if (split.length == 2 && !split[1].equals(Main.chatScreen.getUsername())) {
+                        Main.chatScreen.addUser(split[1]);
+                    }
                 }
                 System.out.println(inMsg);
             }

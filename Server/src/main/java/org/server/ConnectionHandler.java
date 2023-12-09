@@ -30,7 +30,7 @@ public class ConnectionHandler implements Runnable {
                 switch (msg) {
                     case "/quit": {
                         if (client.getUsername() != null) {
-                            Server.broadcast(client.getUsername() + " left the chat");
+                            Server.broadcast("/user_offline " + client.getUsername(), client.getUsername());
                         }
                         this.shutdown();
                         break;
@@ -64,6 +64,7 @@ public class ConnectionHandler implements Runnable {
                             }
                             else {
                                 this.sendLine("/register_success Đăng kí thành công, hãy đăng nhập!");
+                                Server.broadcast("/new_user " + username);
                             }
                         } catch (NoSuchAlgorithmException e) {
                             this.sendLine("/register_error Tên đăng nhập đã tồn tại!");
@@ -85,6 +86,8 @@ public class ConnectionHandler implements Runnable {
                         }
                         else {
                             sendLine("/chat_success");
+                            sendLine(this.client.getUsername());
+                            sendLine(content);
                         }
                         break;
                     }
@@ -94,6 +97,20 @@ public class ConnectionHandler implements Runnable {
                         this.sendLine(Integer.toString(userList.size()));
                         for (String username : userList) {
                             this.sendLine(username);
+                        }
+                        break;
+                    }
+                    case "/get_online_users": {
+                        ArrayList<String> online_users = new ArrayList<>();
+                        for (ConnectionHandler ch : Server.connections) {
+                            if (ch.client.getUsername() != null) {
+                                online_users.add(ch.client.getUsername());
+                            }
+                        }
+                        this.sendLine("/online_user_list");
+                        this.sendLine(Integer.toString(online_users.size()));
+                        for (String user : online_users) {
+                            this.sendLine(user);
                         }
                         break;
                     }
@@ -112,11 +129,6 @@ public class ConnectionHandler implements Runnable {
                         break;
                     }
                 }
-//                if (msg.startsWith("/quit")) {
-//                } else {
-////                    System.out.println(client.getUsername() + ": " + msg);
-//                    System.out.println(msg);
-//                }
             }
         } catch (IOException e) {
             this.shutdown();
