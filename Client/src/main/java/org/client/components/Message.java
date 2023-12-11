@@ -21,10 +21,14 @@ public class Message extends JButton {
     private Color colorClick;
     private Color borderColor;
     public String username;
+    public String id;
+    public String content;
     public ArrayList<ArrayList<String>> chatLog;
-    public Message(String content) {
+    public Message(String username, String content, String id) {
         this.chatLog = new ArrayList<>();
         this.username = username;
+        this.content = content;
+        this.id = id;
         color = Color.WHITE;
         colorOver = Color.WHITE;
         colorClick = Color.GRAY;
@@ -37,8 +41,17 @@ public class Message extends JButton {
 
 //        this.setBackground(ChatScreen.OFFLINE);
         addActionListener(new ActionListener() {
+            final Object[] options = {"Có", "Không"};
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (username.equals(Main.chatScreen.getUsername())) {
+                    int input = JOptionPane.showOptionDialog(Main.chatScreen.getContentPane(), "Bạn có muốn xoá tin nhắn này?", "Xoá tin nhắn", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
+                    if (input == 0) {
+                        Main.client.sendLine("/remove_message");
+                        Main.client.sendLine(id);
+                        Main.client.sendLine(Main.chatScreen.getCurrentChatUser());
+                    }
+                }
             }
         });
 

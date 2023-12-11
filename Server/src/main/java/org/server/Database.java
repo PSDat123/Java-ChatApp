@@ -1,11 +1,14 @@
 package org.server;
 
 import com.mongodb.client.*;
+import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.InsertOneResult;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.bson.BsonDocument;
+import org.bson.BsonObjectId;
 import org.bson.BsonValue;
 import org.bson.Document;
+import org.bson.types.ObjectId;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -94,12 +97,15 @@ public class Database {
         Document doc = userCollection.find(eq("username", username)).first();
         return doc != null;
     }
-    public static boolean saveChat(String from, String to, String content) {
-        if (!userExists(to)) return false;
+    public static String saveChat(String from, String to, String content) {
+        if (!userExists(to)) return null;
         Document newChat = new Document().append("from", from).append("to", to).append("content", content);
         InsertOneResult result = chatCollection.insertOne(newChat);
-        BsonValue id = result.getInsertedId();
-        return id != null;
+        BsonObjectId bson_id = (BsonObjectId) result.getInsertedId();
+        if (bson_id == null) {
+            return null;
+        }
+        return bson_id.getValue().toString();
     }
 
     public static ArrayList<ArrayList<String>> getChatLog(String self, String other) {
@@ -110,15 +116,17 @@ public class Database {
         {
             while(cursor.hasNext()) {
                 BsonDocument doc = cursor.next().toBsonDocument();
+                BsonObjectId bson_id = (BsonObjectId) doc.get("_id");
+                String id = bson_id.getValue().toString();
                 String from = doc.get("from").asString().getValue();
                 String content = doc.get("content").asString().getValue();
-                logs.add(new ArrayList<>(List.of(from, content)));
+                logs.add(new ArrayList<>(List.of(from, content, id)));
             }
         }
         return logs;
-//        Document newChat = new Document().append("from", from).append("to", to).append("content", content);
-//        InsertOneResult result = chatCollection.insertOne(newChat);
-//        BsonValue id = result.getInsertedId();
-//        return id != null;
+    }
+    public static boolean removeMessage(String username, String id) {
+        DeleteResult delResult = chatCollection.deleteOne(and(eq("_id", new ObjectId(id)), eq("from", username)));
+        return delResult.getDeletedCount() == 1;
     }
 }

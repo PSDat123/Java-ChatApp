@@ -1,5 +1,6 @@
 package org.client.components;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.client.ChatScreen;
 import org.client.Main;
 
@@ -9,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 
 public class User extends JButton {
     public String username;
@@ -31,15 +33,22 @@ public class User extends JButton {
                 else {
                     Main.chatScreen.updateMsgList();
                 }
-//                Main.chatScreen.clearMessageList();
-//                Main.chatScreen.addChatLog(chatLog);
-
+                Main.chatScreen.setTitle(Main.chatScreen.getOriginalTitle() + " - Texting " + username);
             }
         });
     }
 
-    public void addToChatLog(String from, String content) {
-        chatLog.add(new ArrayList<>(Arrays.asList(from, content)));
+    public void addToChatLog(String from, String content, String id) {
+        chatLog.add(new ArrayList<>(Arrays.asList(from, content, id)));
+    }
+    public void removeFromChatLog(String id) {
+        for (int i = 0; i < chatLog.size(); ++i) {
+            if (Objects.equals(chatLog.get(i).get(2), id))  {
+                chatLog.remove(i);
+                break;
+            }
+        }
+//        chatLog.add(new ArrayList<>(Arrays.asList(from, content, id)));
     }
     public ArrayList<ArrayList<String>> getChatLog() {
         return chatLog;

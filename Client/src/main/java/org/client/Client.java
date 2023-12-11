@@ -2,10 +2,7 @@ package org.client;
 
 import org.client.components.User;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 
@@ -13,6 +10,7 @@ public class Client implements Runnable {
     private Socket client;
     private PrintWriter out;
     private BufferedReader in;
+    private DataOutputStream fout;
     private boolean done = false;
 
 
@@ -22,7 +20,7 @@ public class Client implements Runnable {
             client = new Socket("127.0.0.1", 8080);
             out = new PrintWriter(client.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(client.getInputStream()));
-
+            fout = new DataOutputStream(client.getOutputStream());
 //            InputHandler inHandler = new InputHandler();
 //            Thread t = new Thread(inHandler);
 //            t.start();
@@ -73,6 +71,7 @@ public class Client implements Runnable {
                     int n = Integer.parseInt(in.readLine().strip());
                     for (int i = 0; i < n; ++i) {
                         Main.chatScreen.activateUser(in.readLine().strip());
+
                     }
                 }
                 else if (inMsg.startsWith("/user_online")) {
@@ -90,12 +89,13 @@ public class Client implements Runnable {
                 else if (inMsg.startsWith("/message_from")) {
                     String username = in.readLine().strip();
                     String content = in.readLine().strip();
+                    String id = in.readLine().strip();
 
                     User user = Main.chatScreen.getUserComp(username);
                     if (user != null) {
-                        user.addToChatLog(username, content);
+                        user.addToChatLog(username, content, id);
                         if (username.equals(Main.chatScreen.getCurrentChatUser())) {
-                            Main.chatScreen.addMessage(username, content);
+                            Main.chatScreen.addMessage(username, content, id);
                         }
                     }
                 }
@@ -107,7 +107,8 @@ public class Client implements Runnable {
                         for (int i = 0; i < n; ++i) {
                             String from = in.readLine().strip();
                             String content = in.readLine().strip();
-                            user.addToChatLog(from, content);
+                            String id = in.readLine().strip();
+                            user.addToChatLog(from, content, id);
                         }
 
                         if (username.equals(Main.chatScreen.getCurrentChatUser())) {
@@ -118,12 +119,26 @@ public class Client implements Runnable {
                 else if (inMsg.startsWith("/chat_success")) {
                     String username = in.readLine().strip();
                     String content = in.readLine().strip();
-                    Main.chatScreen.addMessage(username, content);
+                    String id = in.readLine().strip();
+                    User user = Main.chatScreen.getUserComp(username);
+                    if (user != null) {
+                        user.addToChatLog(Main.chatScreen.getUsername(), content, id);
+                    }
+                    Main.chatScreen.addMessage(Main.chatScreen.getUsername(), content, id);
                 }
                 else if (inMsg.startsWith("/new_user")) {
                     String[] split = inMsg.split(" ", 2);
                     if (split.length == 2 && !split[1].equals(Main.chatScreen.getUsername())) {
                         Main.chatScreen.addUser(split[1]);
+                    }
+                }
+                else if (inMsg.startsWith("/remove_message")) {
+                    String chatUser = in.readLine().strip();
+                    String id = in.readLine().strip();
+                    User user = Main.chatScreen.getUserComp(chatUser);
+                    if (user != null) {
+                        user.removeFromChatLog(id);
+                        Main.chatScreen.updateMsgList(false);
                     }
                 }
                 System.out.println(inMsg);
@@ -139,6 +154,7 @@ public class Client implements Runnable {
             System.out.println("Closing...");
             done = true;
             in.close();
+            fout.close();
             out.close();
             if (!client.isClosed()) {
                 client.close();

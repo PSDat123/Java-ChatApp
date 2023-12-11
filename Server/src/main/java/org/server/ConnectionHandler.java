@@ -1,9 +1,6 @@
 package org.server;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -13,6 +10,7 @@ public class ConnectionHandler implements Runnable {
     private Client client;
     private PrintWriter out;
     private BufferedReader in;
+    private DataInputStream fin;
     public ConnectionHandler(Socket socket) {
         this.client = new Client(socket);
     }
@@ -22,6 +20,7 @@ public class ConnectionHandler implements Runnable {
         try {
             this.out = new PrintWriter(client.getSocket().getOutputStream(), true);
             this.in = new BufferedReader(new InputStreamReader(client.getSocket().getInputStream()));
+            this.fin = new DataInputStream(client.getSocket().getInputStream());
 //            this.sendLine("Please enter your username: ");
 //            client.setUsername(this.recvLine());
 //            System.out.println(client.getUsername() + " connected!");
@@ -31,6 +30,7 @@ public class ConnectionHandler implements Runnable {
                     case "/quit": {
                         if (client.getUsername() != null) {
                             Server.broadcast("/user_offline " + client.getUsername(), client.getUsername());
+                            this.client.setUsername(null);
                         }
                         this.shutdown();
                         break;
@@ -74,20 +74,24 @@ public class ConnectionHandler implements Runnable {
                     case "/chat": {
                         String to = this.recvLine().strip();
                         String content = this.recvLine().strip();
-                        for (ConnectionHandler ch : Server.connections) {
-                            if (ch.client.getUsername().equals(to)) {
-                                ch.sendLine("/message_from");
-                                ch.sendLine(this.client.getUsername());
-                                ch.sendLine(content);
+                        String id = Database.saveChat(client.getUsername(), to, content);
+                        if(id != null) {
+                            for (ConnectionHandler ch : Server.connections) {
+                                if (ch.client != null && ch.client.getUsername().equals(to)) {
+                                    ch.sendLine("/message_from");
+                                    ch.sendLine(this.client.getUsername());
+                                    ch.sendLine(content);
+                                    ch.sendLine(id);
+                                    break;
+                                }
                             }
-                        }
-                        if(!Database.saveChat(client.getUsername(), to, content)) {
-                            sendLine("/error_chat can't save chat!");
+                            sendLine("/chat_success");
+                            sendLine(to);
+                            sendLine(content);
+                            sendLine(id);
                         }
                         else {
-                            sendLine("/chat_success");
-                            sendLine(this.client.getUsername());
-                            sendLine(content);
+                            sendLine("/error_chat can't save chat!");
                         }
                         break;
                     }
@@ -103,7 +107,7 @@ public class ConnectionHandler implements Runnable {
                     case "/get_online_users": {
                         ArrayList<String> online_users = new ArrayList<>();
                         for (ConnectionHandler ch : Server.connections) {
-                            if (ch.client.getUsername() != null) {
+                            if (ch.client != null && ch.client.getUsername() != null) {
                                 online_users.add(ch.client.getUsername());
                             }
                         }
@@ -122,10 +126,42 @@ public class ConnectionHandler implements Runnable {
                             this.sendLine(username);
                             this.sendLine(Integer.toString(logs.size()));
                             for (ArrayList<String> log : logs) {
-                                this.sendLine(log.get(0));
-                                this.sendLine(log.get(1));
+                                this.sendLine(log.get(0)); // from
+                                this.sendLine(log.get(1)); // content
+                                this.sendLine(log.get(2)); // id
                             }
                         }
+                        break;
+                    }
+                    case "/remove_message": {
+                        String id = this.recvLine().strip();
+                        String chatUser = this.recvLine().strip();
+//                        System.out.println("DELETE " + id);
+                        if(Database.removeMessage(this.client.getUsername(), id)) {
+                            for (ConnectionHandler ch : Server.connections) {
+                                if (ch.client != null && ch.client.getUsername().equals(chatUser)) {
+                                    ch.sendLine("/remove_message");
+                                    ch.sendLine(this.client.getUsername());
+                                    ch.sendLine(id);
+                                    break;
+                                }
+                            }
+                            this.sendLine("/remove_message");
+                            this.sendLine(chatUser);
+                            this.sendLine(id);
+                        }
+//                        String content = this.recvLine().strip();
+//                        ArrayList<String> online_users = new ArrayList<>();
+//                        for (ConnectionHandler ch : Server.connections) {
+//                            if (ch.client.getUsername() != null) {
+//                                online_users.add(ch.client.getUsername());
+//                            }
+//                        }
+//                        this.sendLine("/online_user_list");
+//                        this.sendLine(Integer.toString(online_users.size()));
+//                        for (String user : online_users) {
+//                            this.sendLine(user);
+//                        }
                         break;
                     }
                 }
@@ -146,11 +182,14 @@ public class ConnectionHandler implements Runnable {
     }
     public void shutdown() {
         try {
+            this.client.setUsername(null);
             in.close();
+            fin.close();
             out.close();
             if (!client.getSocket().isClosed()) {
                 client.getSocket().close();
             }
+            this.client = null;
             Server.connections.remove(this);
         } catch (IOException e) {
             // ignore

@@ -1,5 +1,6 @@
 package org.client;
 
+import org.client.components.FileButton;
 import org.client.components.User;
 import org.client.components.Message;
 
@@ -22,26 +23,21 @@ public class ChatScreen extends JFrame implements ActionListener {
     private String username;
     private JScrollPane scrollPane;
     private JScrollPane messageScrollPane;
-//    private JPanel userList;
-//    private JPanel mainPanel;
     private JTextField textField;
     private GridBagConstraints mainGBC;
     private GridBagConstraints userListGBC;
     private GridBagConstraints chatGBC;
-    private DefaultListModel<String> messageList;
-    private DefaultListModel<User> userListModel;
     private JPanel userPane;
     private JPanel userList;
     private JPanel chatPanel;
     private JPanel messagePanel;
-//    private JPanel leftChatPanel;
-//    private JPanel rightChatPanel;
     private Font defaultFont = new Font("SansSerif", Font.PLAIN, 16);
     private Font boldFont = new Font("SansSerif", Font.BOLD, 16);
     private HashMap<String, User> userMap;
     private String currentChatUser;
     private String previousUser;
     private int currentLine = 0;
+    private String originalTitle;
     public ChatScreen() {
         setTitle("Ứng dụng chat - 21127243");
         userMap = new HashMap<>();
@@ -130,13 +126,15 @@ public class ChatScreen extends JFrame implements ActionListener {
         mainGBC.gridy = 0;
 //        JList<String> msgjlist = new JList<>(messageList);
 //        msgjlist.setFont(defaultFont);
+        // Text Field
         chatPanelContainer.setMinimumSize(new Dimension(0,425));
         messageScrollPane = new JScrollPane(chatPanelContainer, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        messageScrollPane.setPreferredSize(new Dimension(1,1));
         add(messageScrollPane, mainGBC);
         mainGBC.gridx = 2;
         mainGBC.gridy = 4;
         mainGBC.gridheight = 1;
-        mainGBC.gridwidth = 8;
+        mainGBC.gridwidth = 7;
         mainGBC.weightx = 1.0;
         mainGBC.weighty = 0;
         textField = new JTextField(20);
@@ -144,8 +142,16 @@ public class ChatScreen extends JFrame implements ActionListener {
         textField.addActionListener(this);
         textField.setActionCommand("chat");
         add(textField, mainGBC);
+        // Upload file button
 
-
+        mainGBC.gridx = 9;
+        mainGBC.gridy = 4;
+        mainGBC.gridheight = 1;
+        mainGBC.gridwidth = 1;
+        mainGBC.weightx = 0;
+        mainGBC.weighty = 0;
+        FileButton fileButton = new FileButton();
+        add(fileButton, mainGBC);
 
         setSize(700, 425);
 //        setResizable(false);
@@ -184,7 +190,6 @@ public class ChatScreen extends JFrame implements ActionListener {
             case "chat": {
                 if (currentChatUser != null) {
                     String content = textField.getText();
-                    userMap.get(currentChatUser).addToChatLog(username, content);
                     Main.client.sendLine("/chat");
                     Main.client.sendLine(currentChatUser);
                     Main.client.sendLine(content);
@@ -224,133 +229,95 @@ public class ChatScreen extends JFrame implements ActionListener {
         validate();
         repaint();
     }
+    private JPanel genNameContainer(String username, boolean left) {
+        GridBagConstraints tmpGBC2 = new GridBagConstraints();
+        JPanel nameContainer = new JPanel(new GridBagLayout());
+        tmpGBC2.gridwidth = 1;
+
+        tmpGBC2.fill = GridBagConstraints.HORIZONTAL;
+        tmpGBC2.weightx = 0.3;
+        tmpGBC2.gridx = left ? 0 : 1;
+        JLabel name = new JLabel(username, left ? SwingConstants.LEFT: SwingConstants.RIGHT);
+        name.setForeground(new Color(0, 0,0, 125));
+        nameContainer.add(name, tmpGBC2);
+
+        tmpGBC2.fill = GridBagConstraints.HORIZONTAL;
+        tmpGBC2.weightx = 1.0;
+        tmpGBC2.gridx = left ? 1 : 0;
+        nameContainer.add(new JLabel(), tmpGBC2);
+        return nameContainer;
+    }
+    private JPanel genMessageContainer(String from, String content, String id, boolean left) {
+        GridBagConstraints tmpGBC2 = new GridBagConstraints();
+        JPanel messageContainer = new JPanel(new GridBagLayout());
+        tmpGBC2.gridwidth = 1;
+        tmpGBC2.fill = GridBagConstraints.HORIZONTAL;
+        tmpGBC2.weightx = 0;
+        tmpGBC2.gridx = left ? 0 : 1;
+        Message msg = new Message(from, content, id);
+        msg.setHorizontalAlignment(left ? SwingConstants.LEFT: SwingConstants.RIGHT);
+        messageContainer.add(msg, tmpGBC2);
+        tmpGBC2.weightx = 1.0;
+        tmpGBC2.gridx = left ? 1 : 0;
+        messageContainer.add(new JLabel(), tmpGBC2);
+        return messageContainer;
+    }
     public void updateMsgList() {
+        updateMsgList(true);
+    }
+    public void updateMsgList(boolean scrollToBottom) {
+        int currentScroll = messageScrollPane.getVerticalScrollBar().getValue();
         clearMessageList();
         ArrayList<ArrayList<String>> chatLog = userMap.get(currentChatUser).getChatLog();
-//        ArrayList<String> lines = new ArrayList<>();
         GridBagConstraints tmpGBC = new GridBagConstraints();
-        GridBagConstraints tmpGBC2 = new GridBagConstraints();
         tmpGBC.gridheight = 1;
         currentLine = 0;
+//        System.out.println(currentScroll);
         messagePanel.setVisible(false);
-
         for (ArrayList<String> log : chatLog) {
             if (!log.get(0).equals(previousUser)) {
                 tmpGBC.gridy = currentLine;
+                tmpGBC.fill = GridBagConstraints.HORIZONTAL;
+                tmpGBC.weightx = 1.0;
                 if (!log.get(0).equals(this.username)) {
-                    JPanel nameContainer = new JPanel(new GridBagLayout());
-                    tmpGBC2.gridwidth = 1;
-
-                    tmpGBC2.fill = GridBagConstraints.HORIZONTAL;
-                    tmpGBC2.weightx = 0.3;
-                    tmpGBC2.gridx = 0;
-                    JLabel name = new JLabel(log.get(0), SwingConstants.LEFT);
-                    name.setForeground(new Color(0, 0,0, 125));
-                    nameContainer.add(name, tmpGBC2);
-
-                    tmpGBC2.fill = GridBagConstraints.HORIZONTAL;
-                    tmpGBC2.weightx = 1.0;
-                    tmpGBC2.gridx = 1;
-                    nameContainer.add(new JLabel(), tmpGBC2);
-
-                    tmpGBC.fill = GridBagConstraints.HORIZONTAL;
-                    tmpGBC.weightx = 1.0;
+                    JPanel nameContainer = genNameContainer(log.get(0), true);
                     tmpGBC.gridx = 0;
                     messagePanel.add(nameContainer, tmpGBC);
                     tmpGBC.gridx = 1;
                     messagePanel.add(new JLabel(), tmpGBC);
                 }
                 else {
-                    JPanel nameContainer = new JPanel(new GridBagLayout());
-                    tmpGBC2.gridwidth = 1;
-                    tmpGBC2.fill = GridBagConstraints.HORIZONTAL;
-                    tmpGBC2.weightx = 1.0;
-                    tmpGBC2.gridx = 0;
-                    nameContainer.add(new JLabel(), tmpGBC2);
-
-                    tmpGBC2.fill = GridBagConstraints.HORIZONTAL;
-                    tmpGBC2.weightx = 0.3;
-                    tmpGBC2.gridx = 1;
-                    JLabel name = new JLabel(log.get(0), SwingConstants.RIGHT);
-                    name.setForeground(new Color(0, 0,0, 125));
-                    nameContainer.add(name, tmpGBC2);
-
-                    tmpGBC.fill = GridBagConstraints.HORIZONTAL;
-                    tmpGBC.weightx = 1.0;
+                    JPanel nameContainer = genNameContainer(log.get(0), false);
                     tmpGBC.gridx = 0;
                     messagePanel.add(new JLabel(), tmpGBC);
                     tmpGBC.gridx = 1;
                     messagePanel.add(nameContainer, tmpGBC);
                 }
-                ++currentLine;
-                tmpGBC.gridy = currentLine;
+                tmpGBC.gridy = ++currentLine;
                 tmpGBC.gridx = 0;
-                tmpGBC.fill = GridBagConstraints.HORIZONTAL;
-                tmpGBC.weightx = 1.0;
                 messagePanel.add(Box.createRigidArea(new Dimension(0, 3)), tmpGBC);
                 previousUser = log.get(0);
                 ++currentLine;
             }
             tmpGBC.gridy = currentLine;
-//            lines.add(String.format("%s: %s", log.get(0), log.get(1)));
+            tmpGBC.fill = GridBagConstraints.HORIZONTAL;
+            tmpGBC.weightx = 1.0;
             if (!log.get(0).equals(this.username)) {
-                JPanel messageContainer = new JPanel(new GridBagLayout());
-                tmpGBC2.gridwidth = 1;
-
-                tmpGBC2.fill = GridBagConstraints.HORIZONTAL;
-                tmpGBC2.weightx = 0;
-                tmpGBC2.gridx = 0;
-                Message msg = new Message(log.get(1));
-                msg.setHorizontalAlignment(SwingConstants.LEFT);
-                messageContainer.add(msg, tmpGBC2);
-
-                tmpGBC2.fill = GridBagConstraints.HORIZONTAL;
-                tmpGBC2.weightx = 1.0;
-                tmpGBC2.gridx = 1;
-                messageContainer.add(new JLabel(), tmpGBC2);
-
-
-                tmpGBC.fill = GridBagConstraints.HORIZONTAL;
-                tmpGBC.weightx = 1.0;
+                JPanel messageContainer = genMessageContainer(log.get(0), log.get(1), log.get(2), true);
                 tmpGBC.gridx = 0;
                 messagePanel.add(messageContainer, tmpGBC);
-                tmpGBC.fill = GridBagConstraints.HORIZONTAL;
-                tmpGBC.weightx = 1.0;
                 tmpGBC.gridx = 1;
                 messagePanel.add(new JLabel(), tmpGBC);
             }
             else {
+                JPanel messageContainer = genMessageContainer(log.get(0), log.get(1), log.get(2), false);
                 tmpGBC.gridx = 0;
-                tmpGBC.fill = GridBagConstraints.HORIZONTAL;
-                tmpGBC.weightx = 1.0;
                 messagePanel.add(new JLabel(), tmpGBC);
-
-                JPanel messageContainer = new JPanel(new GridBagLayout());
-                tmpGBC2.gridwidth = 1;
-
-                tmpGBC2.fill = GridBagConstraints.HORIZONTAL;
-                tmpGBC2.weightx = 0;
-                tmpGBC2.gridx = 1;
-                Message msg = new Message(log.get(1));
-                msg.setHorizontalAlignment(SwingConstants.RIGHT);
-                messageContainer.add(msg, tmpGBC2);
-
-                tmpGBC2.fill = GridBagConstraints.HORIZONTAL;
-                tmpGBC2.weightx = 1.0;
-                tmpGBC2.gridx = 0;
-                messageContainer.add(new JLabel(), tmpGBC2);
-
-                tmpGBC.fill = GridBagConstraints.HORIZONTAL;
-                tmpGBC.weightx = 1.0;
                 tmpGBC.gridx = 1;
                 messagePanel.add(messageContainer, tmpGBC);
-
             }
-            ++currentLine;
-            tmpGBC.gridy = currentLine;
+            tmpGBC.gridy = ++currentLine;
             tmpGBC.gridx = 0;
-            tmpGBC.fill = GridBagConstraints.HORIZONTAL;
-            tmpGBC.weightx = 1.0;
             messagePanel.add(Box.createRigidArea(new Dimension(0, 3)), tmpGBC);
             ++currentLine;
         }
@@ -358,16 +325,24 @@ public class ChatScreen extends JFrame implements ActionListener {
         invalidate();
         validate();
         repaint();
-        SwingUtilities.invokeLater(() -> {
-            JScrollBar vertical = messageScrollPane.getVerticalScrollBar();
-            vertical.setValue( vertical.getMaximum() );
-        });
-
+        if (scrollToBottom) {
+            SwingUtilities.invokeLater(() -> {
+                JScrollBar vertical = messageScrollPane.getVerticalScrollBar();
+                vertical.setValue( vertical.getMaximum() );
+            });
+        }
+        else {
+            SwingUtilities.invokeLater(() -> {
+                JScrollBar vertical = messageScrollPane.getVerticalScrollBar();
+                vertical.setValue(currentScroll);
+            });
+        }
     }
 
     public void setUsername(String username) {
         this.username = username;
         this.setTitle("ChatApp - " + username);
+        this.originalTitle = this.getTitle();
     }
     public String getUsername() {
         return username;
@@ -375,125 +350,54 @@ public class ChatScreen extends JFrame implements ActionListener {
     public User getUserComp(String username) {
         return userMap.get(username);
     }
-    public void addMessage(String from, String content) {
+    public String getOriginalTitle() { return originalTitle; }
+
+    public void addMessage(String from, String content, String id) {
         GridBagConstraints tmpGBC = new GridBagConstraints();
-        GridBagConstraints tmpGBC2 = new GridBagConstraints();
         tmpGBC.gridheight = 1;
         if (!from.equals(previousUser)) {
+            tmpGBC.fill = GridBagConstraints.HORIZONTAL;
+            tmpGBC.weightx = 1.0;
             tmpGBC.gridy = currentLine;
             if (!from.equals(this.username)) {
-                JPanel nameContainer = new JPanel(new GridBagLayout());
-                tmpGBC2.gridwidth = 1;
-
-                tmpGBC2.fill = GridBagConstraints.HORIZONTAL;
-                tmpGBC2.weightx = 0.3;
-                tmpGBC2.gridx = 0;
-                JLabel name = new JLabel(from, SwingConstants.LEFT);
-                name.setForeground(new Color(0, 0,0, 125));
-                nameContainer.add(name, tmpGBC2);
-
-                tmpGBC2.fill = GridBagConstraints.HORIZONTAL;
-                tmpGBC2.weightx = 1.0;
-                tmpGBC2.gridx = 1;
-                nameContainer.add(new JLabel(), tmpGBC2);
-
-                tmpGBC.fill = GridBagConstraints.HORIZONTAL;
-                tmpGBC.weightx = 1.0;
+                JPanel nameContainer = genNameContainer(from, true);
                 tmpGBC.gridx = 0;
                 messagePanel.add(nameContainer, tmpGBC);
                 tmpGBC.gridx = 1;
                 messagePanel.add(new JLabel(), tmpGBC);
             }
             else {
-                JPanel nameContainer = new JPanel(new GridBagLayout());
-                tmpGBC2.gridwidth = 1;
-                tmpGBC2.fill = GridBagConstraints.HORIZONTAL;
-                tmpGBC2.weightx = 1.0;
-                tmpGBC2.gridx = 0;
-                nameContainer.add(new JLabel(), tmpGBC2);
-
-                tmpGBC2.fill = GridBagConstraints.HORIZONTAL;
-                tmpGBC2.weightx = 0.3;
-                tmpGBC2.gridx = 1;
-                JLabel name = new JLabel(from, SwingConstants.RIGHT);
-                name.setForeground(new Color(0, 0,0, 125));
-                nameContainer.add(name, tmpGBC2);
-
-                tmpGBC.fill = GridBagConstraints.HORIZONTAL;
-                tmpGBC.weightx = 1.0;
+                JPanel nameContainer = genNameContainer(from, false);
                 tmpGBC.gridx = 0;
                 messagePanel.add(new JLabel(), tmpGBC);
                 tmpGBC.gridx = 1;
                 messagePanel.add(nameContainer, tmpGBC);
             }
-            ++currentLine;
-            tmpGBC.gridy = currentLine;
+            tmpGBC.gridy = ++currentLine;
             tmpGBC.gridx = 0;
-            tmpGBC.fill = GridBagConstraints.HORIZONTAL;
-            tmpGBC.weightx = 1.0;
             messagePanel.add(Box.createRigidArea(new Dimension(0, 3)), tmpGBC);
             previousUser = from;
             ++currentLine;
         }
         tmpGBC.gridy = currentLine;
+        tmpGBC.fill = GridBagConstraints.HORIZONTAL;
+        tmpGBC.weightx = 1.0;
         if (!from.equals(this.username)) {
-            JPanel messageContainer = new JPanel(new GridBagLayout());
-            tmpGBC2.gridwidth = 1;
-
-            tmpGBC2.fill = GridBagConstraints.HORIZONTAL;
-            tmpGBC2.weightx = 0;
-            tmpGBC2.gridx = 0;
-            Message msg = new Message(content);
-            msg.setHorizontalAlignment(SwingConstants.LEFT);
-            messageContainer.add(msg, tmpGBC2);
-
-            tmpGBC2.fill = GridBagConstraints.HORIZONTAL;
-            tmpGBC2.weightx = 1.0;
-            tmpGBC2.gridx = 1;
-            messageContainer.add(new JLabel(), tmpGBC2);
-
-
-            tmpGBC.fill = GridBagConstraints.HORIZONTAL;
-            tmpGBC.weightx = 1.0;
+            JPanel messageContainer = genMessageContainer(from, content, id, true);
             tmpGBC.gridx = 0;
             messagePanel.add(messageContainer, tmpGBC);
-            tmpGBC.fill = GridBagConstraints.HORIZONTAL;
-            tmpGBC.weightx = 1.0;
             tmpGBC.gridx = 1;
             messagePanel.add(new JLabel(), tmpGBC);
         }
         else {
+            JPanel messageContainer = genMessageContainer(from, content, id, false);
             tmpGBC.gridx = 0;
-            tmpGBC.fill = GridBagConstraints.HORIZONTAL;
-            tmpGBC.weightx = 1.0;
             messagePanel.add(new JLabel(), tmpGBC);
-
-            JPanel messageContainer = new JPanel(new GridBagLayout());
-            tmpGBC2.gridwidth = 1;
-
-            tmpGBC2.fill = GridBagConstraints.HORIZONTAL;
-            tmpGBC2.weightx = 0;
-            tmpGBC2.gridx = 1;
-            Message msg = new Message(content);
-            msg.setHorizontalAlignment(SwingConstants.RIGHT);
-            messageContainer.add(msg, tmpGBC2);
-
-            tmpGBC2.fill = GridBagConstraints.HORIZONTAL;
-            tmpGBC2.weightx = 1.0;
-            tmpGBC2.gridx = 0;
-            messageContainer.add(new JLabel(), tmpGBC2);
-
-            tmpGBC.fill = GridBagConstraints.HORIZONTAL;
-            tmpGBC.weightx = 1.0;
             tmpGBC.gridx = 1;
             messagePanel.add(messageContainer, tmpGBC);
-
         }
-        ++currentLine;
-        tmpGBC.gridy = currentLine;
+        tmpGBC.gridy = ++currentLine;
         tmpGBC.gridx = 0;
-        tmpGBC.fill = GridBagConstraints.HORIZONTAL;
-        tmpGBC.weightx = 1.0;
         messagePanel.add(Box.createRigidArea(new Dimension(0, 3)), tmpGBC);
         ++currentLine;
         SwingUtilities.invokeLater(() -> {

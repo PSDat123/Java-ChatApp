@@ -4,18 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9257d912-54ef-45cf-9adf-632de24b544d" name="Changes" comment="Add maven and database">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Client/src/main/java/org/client/components/Message.java" afterDir="false" />
+    <list default="true" id="9257d912-54ef-45cf-9adf-632de24b544d" name="Changes" comment="Update UI and socket management">
+      <change afterPath="$PROJECT_DIR$/Client/src/main/java/org/client/components/FileButton.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Client/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/main/java/org/client/AuthScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/org/client/AuthScreen.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/main/java/org/client/ChatScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/org/client/ChatScreen.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/main/java/org/client/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/org/client/Client.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/java/org/client/components/Message.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/org/client/components/Message.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/main/java/org/client/components/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/org/client/components/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/org/server/Auth.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Server/src/main/java/org/server/ConnectionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/org/server/ConnectionHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/org/server/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/org/server/Server.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/src/main/java/org/server/Database.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/org/server/Database.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,7 +44,7 @@
     </option>
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="QODANA_PROBLEMS_VIEW_TAB" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
@@ -154,7 +151,15 @@
       <option name="project" value="LOCAL" />
       <updated>1702036885356</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Update UI and socket management">
+      <option name="closed" value="true" />
+      <created>1702139587403</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1702139587403</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -162,7 +167,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Add maven and database" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add maven and database" />
+    <MESSAGE value="Update UI and socket management" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update UI and socket management" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
