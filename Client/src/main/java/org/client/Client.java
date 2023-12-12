@@ -2,6 +2,8 @@ package org.client;
 
 import org.client.components.User;
 
+import javax.swing.*;
+import java.awt.*;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -11,6 +13,7 @@ public class Client implements Runnable {
     private PrintWriter out;
     private BufferedReader in;
     private DataOutputStream fout;
+    private DataInputStream fin;
     private boolean done = false;
 
 
@@ -21,6 +24,7 @@ public class Client implements Runnable {
             out = new PrintWriter(client.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(client.getInputStream()));
             fout = new DataOutputStream(client.getOutputStream());
+            fin = new DataInputStream(client.getInputStream());
 //            InputHandler inHandler = new InputHandler();
 //            Thread t = new Thread(inHandler);
 //            t.start();
@@ -53,8 +57,7 @@ public class Client implements Runnable {
                             Main.authScreen.dispose();
                             Main.authScreen.setVisible(false);
                             Main.authScreen = null;
-                            Main.chatScreen = new ChatScreen();
-                            Main.chatScreen.setUsername(split[1]);
+                            Main.chatScreen = new ChatScreen(split[1]);
                         }
                     }
                 }
@@ -90,12 +93,13 @@ public class Client implements Runnable {
                     String username = in.readLine().strip();
                     String content = in.readLine().strip();
                     String id = in.readLine().strip();
+                    String type = in.readLine().strip();
 
                     User user = Main.chatScreen.getUserComp(username);
-                    if (user != null) {
-                        user.addToChatLog(username, content, id);
+                    if (user != null && user.getInitializedStatus()) {
+                        user.addToChatLog(username, content, id, type);
                         if (username.equals(Main.chatScreen.getCurrentChatUser())) {
-                            Main.chatScreen.addMessage(username, content, id);
+                            Main.chatScreen.addMessage(username, content, id, type);
                         }
                     }
                 }
@@ -108,7 +112,8 @@ public class Client implements Runnable {
                             String from = in.readLine().strip();
                             String content = in.readLine().strip();
                             String id = in.readLine().strip();
-                            user.addToChatLog(from, content, id);
+                            String type = in.readLine().strip();
+                            user.addToChatLog(from, content, id, type);
                         }
 
                         if (username.equals(Main.chatScreen.getCurrentChatUser())) {
@@ -120,11 +125,12 @@ public class Client implements Runnable {
                     String username = in.readLine().strip();
                     String content = in.readLine().strip();
                     String id = in.readLine().strip();
+                    String type = in.readLine().strip();
                     User user = Main.chatScreen.getUserComp(username);
-                    if (user != null) {
-                        user.addToChatLog(Main.chatScreen.getUsername(), content, id);
+                    if (user != null && user.getInitializedStatus()) {
+                        user.addToChatLog(Main.chatScreen.getUsername(), content, id, type);
                     }
-                    Main.chatScreen.addMessage(Main.chatScreen.getUsername(), content, id);
+                    Main.chatScreen.addMessage(Main.chatScreen.getUsername(), content, id, type);
                 }
                 else if (inMsg.startsWith("/new_user")) {
                     String[] split = inMsg.split(" ", 2);
@@ -141,6 +147,62 @@ public class Client implements Runnable {
                         Main.chatScreen.updateMsgList(false);
                     }
                 }
+                else if (inMsg.startsWith("/download_file")) {
+                    String filename = in.readLine().strip();
+                    String home = System.getProperty("user.home");
+                    String folder = home + "\\Downloads\\";
+                    String filepath = folder + filename;
+                    recvFile(filepath);
+                    Main.chatScreen.isDownloading = false;
+                    new Thread(() -> {
+                        Object[] options = {"OK", "Mở folder"};
+                        int input = JOptionPane.showOptionDialog(Main.chatScreen.getContentPane(), "Tải file thành công! File được lưu tại " + filepath, "Tải thành công", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+                        if (input == 1) {
+                            try {
+                                Desktop desktop = Desktop.getDesktop();
+                                desktop.open(new File(folder));
+                            } catch (IOException e) {
+                                // ignore
+                            }
+                        }
+                    }).start();
+                }
+                else if (inMsg.startsWith("/download_error")) {
+                    String message = in.readLine().strip();
+                    Main.chatScreen.isDownloading = false;
+                    new Thread(() -> {
+                        JOptionPane.showMessageDialog(Main.chatScreen.getContentPane(), message,"Lỗi", JOptionPane.ERROR_MESSAGE);
+                    }).start();
+                }
+                else if (inMsg.startsWith("/group_list")) {
+                    ArrayList<ArrayList<String>> groups = new ArrayList<>();
+                    int n = Integer.parseInt(in.readLine().strip());
+                    for (int i = 0; i < n; ++i) {
+                        ArrayList<String> group = new ArrayList<>();
+                        String id = in.readLine().strip();
+                        String name = in.readLine().strip();
+                        group.add(id);
+                        group.add(name);
+                        int m = Integer.parseInt(in.readLine().strip());
+                        for (int j = 0; j < m; ++j) {
+                            group.add(in.readLine().strip());
+                        }
+                        groups.add(group);
+                    }
+                    Main.chatScreen.updateGroupList(groups);
+                }
+                else if (inMsg.startsWith("/new_group")) {
+                    ArrayList<String> group = new ArrayList<>();
+                    String id = in.readLine().strip();
+                    String name = in.readLine().strip();
+                    group.add(id);
+                    group.add(name);
+                    int m = Integer.parseInt(in.readLine().strip());
+                    for (int j = 0; j < m; ++j) {
+                        group.add(in.readLine().strip());
+                    }
+                    Main.chatScreen.addGroup(group);
+                }
                 System.out.println(inMsg);
             }
         } catch (Exception e) {
@@ -154,6 +216,7 @@ public class Client implements Runnable {
             System.out.println("Closing...");
             done = true;
             in.close();
+            fin.close();
             fout.close();
             out.close();
             if (!client.isClosed()) {
@@ -173,27 +236,40 @@ public class Client implements Runnable {
             shutdown();
         }
     }
-//    class InputHandler implements Runnable {
-//        @Override
-//        public void run() {
-//            try {
-//                BufferedReader inReader = new BufferedReader(new InputStreamReader(System.in));
-//                while (!done) {
-//                    String msg = inReader.readLine();
-//                    if (msg.equals("/quit")) {
-//                        out.println(msg);
-//                        inReader.close();
-//                        shutdown();
-//                    }
-//                    else {
-//                        out.println(msg);
-//                    }
-//                }
-//            } catch (IOException e) {
-//                shutdown();
-//            }
-//        }
-//    }
-//
+    public void recvFile(String filename) throws Exception {
+        int bytes = 0;
+        File file = new File(filename);
+        file.getParentFile().mkdirs();
+        file.createNewFile();
+        FileOutputStream fileOutputStream = new FileOutputStream(file,false);
+
+        long size = fin.readLong(); // read file size
+        byte[] buffer = new byte[4 * 1024];
+        while (size > 0
+                && (bytes = fin.read(
+                buffer, 0,
+                (int)Math.min(buffer.length, size)))
+                != -1) {
+            fileOutputStream.write(buffer, 0, bytes);
+            size -= bytes;
+        }
+//        System.out.println("File is Received");
+        fileOutputStream.close();
+    }
+    public void sendFile(File file) throws Exception {
+        int bytes = 0;
+        FileInputStream fileInputStream = new FileInputStream(file);
+
+        fout.writeLong(file.length());
+
+        byte[] buffer = new byte[4 * 1024];
+        while ((bytes = fileInputStream.read(buffer))
+                != -1) {
+            fout.write(buffer, 0, bytes);
+            fout.flush();
+
+        }
+        fileInputStream.close();
+    }
 
 }

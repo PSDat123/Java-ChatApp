@@ -1,6 +1,5 @@
 package org.client.components;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.client.ChatScreen;
 import org.client.Main;
 
@@ -12,34 +11,43 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class User extends JButton {
+public class Group extends JButton {
     public String username;
+    private String id;
+    private String name;
+    private ArrayList<String> userList;
     public ArrayList<ArrayList<String>> chatLog;
     private boolean initialized_chat = false;
-    public User(String username) {
-        super(username);
+    public Group(ArrayList<String> groupInfo) {
+        super(groupInfo.get(1)); // name
         this.chatLog = new ArrayList<>();
-        this.username = username;
+        this.id = groupInfo.get(0);
+        this.name = groupInfo.get(1);
+        int size = groupInfo.size() - 2;
+        this.userList = new ArrayList<>();
+        for (int i = 0; i < size; ++i) {
+            this.userList.add(groupInfo.get(2 + i)); // usernames
+        }
         this.setContentAreaFilled(false);
-        this.setBackground(ChatScreen.OFFLINE);
+        this.setBackground(ChatScreen.GROUP);
         addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (!initialized_chat ) {
-                    initialized_chat = true;
-                    Main.chatScreen.clearMessageList();
-                    Main.client.sendLine("/get_chat_log_from");
-                    Main.client.sendLine(username);
-                }
-                else {
-                    if (!Main.chatScreen.getCurrentChatUser().equals(username)) {
-                        Main.chatScreen.clearMessageList();
-                        Main.chatScreen.setCurrentChatUser(username);
-                        Main.chatScreen.updateMsgList();
-                    }
-                }
-                Main.chatScreen.setCurrentChatUser(username);
-                Main.chatScreen.setTitle(Main.chatScreen.getOriginalTitle() + " - Texting " + username);
+//                if (!initialized_chat ) {
+//                    initialized_chat = true;
+//                    Main.chatScreen.clearMessageList();
+//                    Main.client.sendLine("/get_chat_log_from");
+//                    Main.client.sendLine(username);
+//                }
+//                else {
+//                    if (!Main.chatScreen.getCurrentChatUser().equals(username)) {
+//                        Main.chatScreen.clearMessageList();
+//                        Main.chatScreen.setCurrentChatUser(username);
+//                        Main.chatScreen.updateMsgList();
+//                    }
+//                }
+//                Main.chatScreen.setCurrentChatUser(username);
+//                Main.chatScreen.setTitle(Main.chatScreen.getOriginalTitle() + " - Texting " + username);
             }
         });
     }
@@ -60,7 +68,7 @@ public class User extends JButton {
     public ArrayList<ArrayList<String>> getChatLog() {
         return chatLog;
     }
-
+    public ArrayList<String> getUserList() { return userList; }
     @Override
     protected void paintComponent(Graphics g) {
         final Graphics2D g2 = (Graphics2D) g.create();

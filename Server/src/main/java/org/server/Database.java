@@ -1,13 +1,12 @@
 package org.server;
 
 import com.mongodb.client.*;
+import com.mongodb.client.model.Filters;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.InsertOneResult;
 import io.github.cdimascio.dotenv.Dotenv;
-import org.bson.BsonDocument;
-import org.bson.BsonObjectId;
-import org.bson.BsonValue;
-import org.bson.Document;
+import org.bson.*;
+import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
 import java.io.BufferedWriter;
@@ -28,7 +27,7 @@ public class Database {
     static MongoClient mongoClient;
     static MongoDatabase db;
     static MongoCollection<Document> userCollection;
-    static MongoCollection<Document> roomCollection;
+    static MongoCollection<Document> groupCollection;
     static MongoCollection<Document> chatCollection;
     public static void init() {
         Dotenv dotenv = Dotenv.load();
@@ -37,7 +36,7 @@ public class Database {
             mongoClient = MongoClients.create(connectionString);
             db = mongoClient.getDatabase("ChatApp");
             userCollection = db.getCollection("users");
-            roomCollection = db.getCollection("rooms");
+            groupCollection = db.getCollection("groups");
             chatCollection = db.getCollection("chats");
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -97,9 +96,9 @@ public class Database {
         Document doc = userCollection.find(eq("username", username)).first();
         return doc != null;
     }
-    public static String saveChat(String from, String to, String content) {
+    public static String saveChat(String from, String to, String content, String type) {
         if (!userExists(to)) return null;
-        Document newChat = new Document().append("from", from).append("to", to).append("content", content);
+        Document newChat = new Document().append("type", type).append("from", from).append("to", to).append("content", content);
         InsertOneResult result = chatCollection.insertOne(newChat);
         BsonObjectId bson_id = (BsonObjectId) result.getInsertedId();
         if (bson_id == null) {
@@ -120,7 +119,8 @@ public class Database {
                 String id = bson_id.getValue().toString();
                 String from = doc.get("from").asString().getValue();
                 String content = doc.get("content").asString().getValue();
-                logs.add(new ArrayList<>(List.of(from, content, id)));
+                String type = doc.get("type").asString().getValue();
+                logs.add(new ArrayList<>(List.of(from, content, id, type)));
             }
         }
         return logs;
@@ -128,5 +128,53 @@ public class Database {
     public static boolean removeMessage(String username, String id) {
         DeleteResult delResult = chatCollection.deleteOne(and(eq("_id", new ObjectId(id)), eq("from", username)));
         return delResult.getDeletedCount() == 1;
+    }
+    public static String getFileNameFromMessage(String username, String id) {
+        Bson filter = and(eq("_id", new ObjectId(id)), eq("from", username), eq("type", "file"));
+        Document user = chatCollection.find(filter).first();
+        if (user == null) return null;
+        return user.getString("content").split("\\|")[0];
+    }
+
+    public static boolean removeFile(String username, String id) {
+        Bson filter = and(eq("_id", new ObjectId(id)), eq("from", username), eq("type", "file"));
+        DeleteResult delResult = chatCollection.deleteOne(filter);
+        return delResult.getDeletedCount() == 1;
+    }
+
+    public static String createGroup(String name, ArrayList<String> userList) {
+        for (String user : userList) {
+            if (!Database.userExists(user)) return null;
+        }
+        Document newUser = new Document().append("name", name).append("users", userList);
+        InsertOneResult result = groupCollection.insertOne(newUser);
+        BsonValue id = result.getInsertedId();
+        BsonObjectId bson_id = (BsonObjectId) id;
+        if (bson_id != null) return bson_id.getValue().toString();
+        return null;
+    }
+
+    public static ArrayList<ArrayList<String>> getAllGroup(String username) {
+        ArrayList<ArrayList<String>> groups = new ArrayList<>();
+        Bson filter = in("users", username);
+        try(MongoCursor<Document> cursor = groupCollection.find(filter)
+                .iterator())
+        {
+            while(cursor.hasNext()) {
+                ArrayList<String> group = new ArrayList<>();
+                BsonDocument doc = cursor.next().toBsonDocument();
+                List<BsonValue> users = doc.getArray("users").getValues();
+                String name = doc.getString("name").getValue();
+                BsonObjectId bson_id = (BsonObjectId) doc.get("_id");
+                String id = bson_id.getValue().toString();
+                group.add(id);
+                group.add(name);
+                for (BsonValue user : users) {
+                    group.add(user.asString().getValue());
+                }
+                groups.add(group);
+            }
+        }
+        return groups;
     }
 }

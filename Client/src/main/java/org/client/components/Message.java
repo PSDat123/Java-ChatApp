@@ -24,36 +24,65 @@ public class Message extends JButton {
     public String id;
     public String content;
     public ArrayList<ArrayList<String>> chatLog;
-    public Message(String username, String content, String id) {
+    public Message(String username, String content, String id, String type) {
         this.chatLog = new ArrayList<>();
         this.username = username;
-        this.content = content;
         this.id = id;
+        this.content = content;
         color = Color.WHITE;
         colorOver = Color.WHITE;
         colorClick = Color.GRAY;
         borderColor = Color.WHITE;
         setBackground(color);
-        String wrapped = WordUtils.wrap(content, 30, "\n", true);
-        this.setText("<html>" + wrapped.replaceAll("\\n", "<br>") + "</html>");
         this.setContentAreaFilled(false);
         this.setBorderPainted(false);
-
-//        this.setBackground(ChatScreen.OFFLINE);
-        addActionListener(new ActionListener() {
-            final Object[] options = {"Có", "Không"};
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (username.equals(Main.chatScreen.getUsername())) {
-                    int input = JOptionPane.showOptionDialog(Main.chatScreen.getContentPane(), "Bạn có muốn xoá tin nhắn này?", "Xoá tin nhắn", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
-                    if (input == 0) {
-                        Main.client.sendLine("/remove_message");
-                        Main.client.sendLine(id);
-                        Main.client.sendLine(Main.chatScreen.getCurrentChatUser());
+        String[] split;
+        if (type.equals("file") && (split = content.split("\\|", 2)).length == 2) {
+            String serverFileName = split[0];
+            String orgFilename = split[1];
+            String wrapped = WordUtils.wrap(orgFilename, 30, "\n", true);
+            this.setIcon(fetchIcon());
+            this.setText("<html>" + wrapped.replaceAll("\\n", "<br>") + "</html>");
+            addActionListener(new ActionListener() {
+                final Object[] options = {"Có", "Không"};
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if (username.equals(Main.chatScreen.getUsername())) {
+                        int input = JOptionPane.showOptionDialog(Main.chatScreen.getContentPane(), "Bạn có muốn xoá tin nhắn này?", "Xoá tin nhắn", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
+                        if (input == 0) {
+                            Main.client.sendLine("/remove_file");
+                            Main.client.sendLine(id);
+                            Main.client.sendLine(Main.chatScreen.getCurrentChatUser());
+                        }
+                    }
+                    else {
+                        if (!Main.chatScreen.isDownloading) {
+                            Main.chatScreen.isDownloading = true;
+                            Main.client.sendLine("/download_file");
+                            Main.client.sendLine(serverFileName);
+                            Main.client.sendLine(orgFilename);
+                        }
                     }
                 }
-            }
-        });
+            });
+        } else {
+            String wrapped = WordUtils.wrap(content, 30, "\n", true);
+            this.setText("<html>" + wrapped.replaceAll("\\n", "<br>") + "</html>");
+            addActionListener(new ActionListener() {
+                final Object[] options = {"Có", "Không"};
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if (username.equals(Main.chatScreen.getUsername())) {
+                        int input = JOptionPane.showOptionDialog(Main.chatScreen.getContentPane(), "Bạn có muốn xoá tin nhắn này?", "Xoá tin nhắn", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
+                        if (input == 0) {
+                            Main.client.sendLine("/remove_message");
+                            Main.client.sendLine(id);
+                            Main.client.sendLine(Main.chatScreen.getCurrentChatUser());
+                        }
+                    }
+                }
+            });
+        }
 
         addMouseListener(new MouseAdapter() {
             @Override
@@ -98,5 +127,23 @@ public class Message extends JButton {
 
 //        g2.fillRoundRect(1, 1, getWidth() - 2, getHeight() - 2, radius, radius);
         super.paintComponent(grphcs);
+    }
+    public ImageIcon fetchIcon() {
+        return new ImageIcon(Toolkit.getDefaultToolkit()
+                .getImage(getClass().getResource("/download.png"))) {
+            @Override
+            public int getIconWidth() {
+                return 24;
+            }
+            @Override
+            public int getIconHeight() {
+                return 24;
+            }
+            @Override
+            public synchronized void paintIcon(Component c, Graphics g,
+                                               int x, int y) {
+                g.drawImage(getImage(), x, y, 24, 24, null);
+            }
+        };
     }
 }

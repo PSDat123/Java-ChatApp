@@ -4,11 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9257d912-54ef-45cf-9adf-632de24b544d" name="Changes" comment="Update UI and socket management">
-      <change afterPath="$PROJECT_DIR$/Client/src/main/java/org/client/components/FileButton.java" afterDir="false" />
+    <list default="true" id="9257d912-54ef-45cf-9adf-632de24b544d" name="Changes" comment="Add delete history &amp;&amp; update UI">
+      <change afterPath="$PROJECT_DIR$/Client/src/main/java/org/client/components/AddGroupModal.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Client/src/main/java/org/client/components/Group.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Client/src/main/resources/download.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/main/java/org/client/ChatScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/org/client/ChatScreen.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/main/java/org/client/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/org/client/Client.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/java/org/client/components/FileButton.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/org/client/components/FileButton.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/main/java/org/client/components/Message.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/org/client/components/Message.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/main/java/org/client/components/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/org/client/components/User.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Server/src/main/java/org/server/ConnectionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/org/server/ConnectionHandler.java" afterDir="false" />
@@ -97,6 +100,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="Client3" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="org.client.Main" />
+      <module name="Client" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Server [compile,exec:java...]" type="MavenRunConfiguration" factoryName="Maven" nameIsGenerated="true">
       <MavenSettings>
         <option name="myGeneralSettings" />
@@ -131,6 +141,7 @@
     <list>
       <item itemvalue="Application.Client1" />
       <item itemvalue="Application.Client2" />
+      <item itemvalue="Application.Client3" />
       <item itemvalue="Maven.Server [compile,exec:java...]" />
     </list>
   </component>
@@ -159,7 +170,15 @@
       <option name="project" value="LOCAL" />
       <updated>1702139587403</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Add delete history &amp;&amp; update UI">
+      <option name="closed" value="true" />
+      <created>1702306327949</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1702306327949</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -168,7 +187,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Add maven and database" />
     <MESSAGE value="Update UI and socket management" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update UI and socket management" />
+    <MESSAGE value="Add delete history &amp;&amp; update UI" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add delete history &amp;&amp; update UI" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

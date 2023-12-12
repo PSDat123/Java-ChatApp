@@ -2,12 +2,11 @@ package org.client.components;
 
 import org.client.Main;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Objects;
+import java.io.File;
 
 public class FileButton extends JButton {
     JFileChooser fc;
@@ -22,10 +21,19 @@ public class FileButton extends JButton {
         addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int choice = fc.showOpenDialog(Main.chatScreen.getContentPane());
-                if (choice == JFileChooser.APPROVE_OPTION) {
-//                    copy();
-                    System.out.println(fc.getSelectedFile());
+                if (Main.chatScreen.getCurrentChatUser() != null) {
+                    int choice = fc.showOpenDialog(Main.chatScreen.getContentPane());
+                    if (choice == JFileChooser.APPROVE_OPTION) {
+                        try {
+                            File f = fc.getSelectedFile();
+                            Main.client.sendLine("/send_file");
+                            Main.client.sendLine(Main.chatScreen.getCurrentChatUser());
+                            Main.client.sendLine(f.getName());
+                            Main.client.sendFile(f);
+                        } catch (Exception ex) {
+                            JOptionPane.showMessageDialog(Main.chatScreen.getContentPane(), "Đã xảy ra lỗi khi gửi file!","Lỗi", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
                 }
             }
         });
