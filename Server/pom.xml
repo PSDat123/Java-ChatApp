@@ -48,7 +48,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>org.server.Server</mainClass>
+                            <mainClass>org.server.Main</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

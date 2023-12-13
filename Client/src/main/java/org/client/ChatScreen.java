@@ -117,6 +117,7 @@ public class ChatScreen extends JFrame implements ActionListener {
         groupListGBC.weightx = 1.0;
         groupListGBC.gridx = 0;
         addGroupBtn = new JButton("+ Tạo nhóm");
+        addGroupBtn.setHorizontalAlignment(SwingConstants.LEFT);
         groupList.add(addGroupBtn, groupListGBC);
         addGroupBtn.addActionListener(new ActionListener() {
             @Override
@@ -207,6 +208,20 @@ public class ChatScreen extends JFrame implements ActionListener {
         FileButton fileButton = new FileButton();
         add(fileButton, mainGBC);
 
+
+        mainGBC.gridx = 0;
+        mainGBC.gridy = 6;
+        mainGBC.gridwidth = 2;
+        JButton logoutBtn = new JButton("Logout");
+        add(logoutBtn, mainGBC);
+
+        logoutBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Main.client.sendLine("/logout");
+            }
+        });
+
         setSize(700, 500);
 //        setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -220,14 +235,15 @@ public class ChatScreen extends JFrame implements ActionListener {
                 Main.client.sendLine("/get_users");
                 Main.client.sendLine("/get_groups");
                 Main.client.sendLine(username);
-
             }
             @Override
             public void windowClosing(WindowEvent e) {
                 if (Main.clientThread.isAlive()) {
                     Main.client.sendLine("/quit");
+                    Main.client.shutdown();
+                } else {
+                    System.exit(0);
                 }
-                System.exit(0);
             }
         });
 
@@ -242,11 +258,13 @@ public class ChatScreen extends JFrame implements ActionListener {
                     Main.client.sendLine("/chat");
                     Main.client.sendLine(currentChatUser);
                     Main.client.sendLine(content);
+                    textField.setText("");
                 } else if (currentChatGroup != null) {
                     String content = textField.getText();
                     Main.client.sendLine("/group_chat");
                     Main.client.sendLine(currentChatGroup);
                     Main.client.sendLine(content);
+                    textField.setText("");
                 }
                 break;
             }
@@ -322,7 +340,8 @@ public class ChatScreen extends JFrame implements ActionListener {
         tmpGBC2.fill = GridBagConstraints.HORIZONTAL;
         tmpGBC2.weightx = 0.3;
         tmpGBC2.gridx = left ? 0 : 1;
-        JLabel name = new JLabel(username, left ? SwingConstants.LEFT: SwingConstants.RIGHT);
+        String displayName = username.length() < 26 ? username : username.substring(0, 25) + "...";
+        JLabel name = new JLabel(displayName, left ? SwingConstants.LEFT: SwingConstants.RIGHT);
         name.setForeground(new Color(0, 0,0, 125));
         nameContainer.add(name, tmpGBC2);
 

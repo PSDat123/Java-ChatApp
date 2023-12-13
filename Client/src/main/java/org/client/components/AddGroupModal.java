@@ -16,6 +16,7 @@ public class AddGroupModal extends JDialog {
     private JList<String> userList;
     private JTextField nameField;
     public AddGroupModal() {
+        super(Main.chatScreen, true);
         JPanel innerPanel = new JPanel();
         innerPanel.setLayout(new BorderLayout());
         JPanel labelPanel = new JPanel(new BorderLayout());

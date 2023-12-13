@@ -1,5 +1,6 @@
 package org.client.components;
 
+import org.apache.commons.text.WordUtils;
 import org.client.ChatScreen;
 import org.client.Main;
 
@@ -12,14 +13,17 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public class Group extends JButton {
-    public String username;
     private String id;
     private String name;
     private ArrayList<String> userList;
     public ArrayList<ArrayList<String>> chatLog;
     private boolean initialized_chat = false;
     public Group(ArrayList<String> groupInfo) {
-        super(groupInfo.get(1)); // name
+//        String wrapped  = WordUtils.wrap(groupInfo.get(1), 15, "\n", true);
+        String displayName = groupInfo.get(1).length() <= 20 ? groupInfo.get(1) : groupInfo.get(1).substring(0, 20) + "...";
+
+        this.setText(displayName);
+        this.setHorizontalAlignment(SwingConstants.LEFT);
         this.chatLog = new ArrayList<>();
         this.id = groupInfo.get(0);
         this.name = groupInfo.get(1);

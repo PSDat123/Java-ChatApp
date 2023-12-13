@@ -1,6 +1,7 @@
 package org.client.components;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.text.WordUtils;
 import org.client.ChatScreen;
 import org.client.Main;
 
@@ -17,8 +18,11 @@ public class User extends JButton {
     public ArrayList<ArrayList<String>> chatLog;
     private boolean initialized_chat = false;
     public User(String username) {
-        super(username);
+        String displayName = username.length() <= 20 ? username : username.substring(0, 20) + "...";
+        this.setText(displayName);
+        this.setHorizontalAlignment(SwingConstants.LEFT);
         this.chatLog = new ArrayList<>();
+
         this.username = username;
         this.setContentAreaFilled(false);
         this.setBackground(ChatScreen.OFFLINE);

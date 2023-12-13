@@ -30,8 +30,8 @@ public class AuthScreen extends JFrame implements ActionListener {
         JLabel loginPasswordLabel = new JLabel("Mật khẩu");
         loginUsernameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         loginPasswordLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        loginUsernameField = new JTextField(15);
-        loginPasswordField = new JPasswordField(15);
+        loginUsernameField = new JTextField(20);
+        loginPasswordField = new JPasswordField(20);
         loginUsernameField.setMaximumSize(loginUsernameField.getPreferredSize());
         loginPasswordField.setMaximumSize(loginPasswordField.getPreferredSize());
 
@@ -61,8 +61,8 @@ public class AuthScreen extends JFrame implements ActionListener {
         JLabel registerPasswordLabel = new JLabel("Mật khẩu");
         registerUsernameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         registerPasswordLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        registerUsernameField = new JTextField(15);
-        registerPasswordField = new JPasswordField(15);
+        registerUsernameField = new JTextField(20);
+        registerPasswordField = new JPasswordField(20);
         registerUsernameField.setMaximumSize(registerUsernameField.getPreferredSize());
         registerPasswordField.setMaximumSize(registerPasswordField.getPreferredSize());
 
@@ -92,8 +92,11 @@ public class AuthScreen extends JFrame implements ActionListener {
             public void windowClosing(WindowEvent e) {
                 if (Main.clientThread.isAlive()) {
                     Main.client.sendLine("/quit");
+                    Main.client.shutdown();
                 }
-                System.exit(0);
+                else {
+                    System.exit(0);
+                }
             }
         });
 
@@ -120,6 +123,10 @@ public class AuthScreen extends JFrame implements ActionListener {
             }
             case "register": {
                 String username = registerUsernameField.getText();
+                if (username.length() > 20) {
+                    setRegisterAlert("Tên đăng nhập quá dài! Tối đa 20 chữ cái", "error");
+                    return;
+                }
                 String password = new String(registerPasswordField.getPassword());
                 Main.client.sendLine("/register");
                 Main.client.sendLine(username);

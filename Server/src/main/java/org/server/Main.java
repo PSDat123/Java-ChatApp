@@ -19,6 +19,8 @@ public class Main extends JFrame {
         listenBtn.setHorizontalAlignment(SwingConstants.CENTER);
         GridBagConstraints gbc = new GridBagConstraints();
         setLayout(new GridBagLayout());
+        gbc.gridy = 0;
+        add(Box.createRigidArea(new Dimension(0, 20)), gbc);
         gbc.gridy = 1;
         JLabel header = new JLabel("ChatApp Server");
         header.setFont(boldFont);
@@ -30,13 +32,11 @@ public class Main extends JFrame {
         gbc.gridy = 5;
         add(notification, gbc);
 
-        gbc.gridy = 0;
-        add(Box.createRigidArea(new Dimension(0, 10)), gbc);
-
         gbc.gridy = 2;
         gbc.fill = GridBagConstraints.VERTICAL;
-        gbc.weighty = 1.0;
+        gbc.weighty = 0.7;
         add(new JLabel(), gbc);
+        gbc.weighty = 1.0;
         gbc.gridy = 6;
         add(new JLabel(), gbc);
 

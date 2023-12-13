@@ -6,6 +6,7 @@ import org.client.components.User;
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
+import java.net.ConnectException;
 import java.net.Socket;
 import java.util.ArrayList;
 
@@ -16,7 +17,7 @@ public class Client implements Runnable {
     private DataOutputStream fout;
     private DataInputStream fin;
     private boolean done = false;
-
+    private String errorMessage;
     @Override
     public void run() {
         try {
@@ -27,7 +28,7 @@ public class Client implements Runnable {
             fin = new DataInputStream(client.getInputStream());
 
             String inMsg;
-            while ((inMsg = in.readLine()) != null) {
+            while (!done && (inMsg = in.readLine()) != null) {
                 if (inMsg.startsWith("/register_error")) {
                     String[] split = inMsg.split(" ", 2);
                     if (split.length == 2) {
@@ -51,8 +52,8 @@ public class Client implements Runnable {
                     if (split.length == 2) {
 //                        Main.authScreen.setLoginAlert(split[1], "success");
                         if (Main.chatScreen == null) {
-                            Main.authScreen.dispose();
                             Main.authScreen.setVisible(false);
+                            Main.authScreen.dispose();
                             Main.authScreen = null;
                             Main.chatScreen = new ChatScreen(split[1]);
                         }
@@ -244,12 +245,33 @@ public class Client implements Runnable {
                         }
                     }
                 }
+                else if (inMsg.startsWith("/logout_success")) {
+                    Main.chatScreen.setVisible(false);
+                    Main.chatScreen.dispose();
+                    Main.chatScreen = null;
+                    Main.authScreen = new AuthScreen();
+                }
                 System.out.println(inMsg);
             }
+        } catch (ConnectException e) {
+            errorMessage = "Không thể kết nối với server, hãy khởi dộng server và chạy lại ứng dụng!";
+            shutdown();
         } catch (Exception e) {
+            errorMessage = e.getLocalizedMessage();
             shutdown();
         }
-        System.out.println("SHUT DOWNED!");
+//        System.out.println("SHUT DOWNED!");
+        if (errorMessage != null) {
+            JOptionPane.showMessageDialog(null, errorMessage,"Lỗi", JOptionPane.ERROR_MESSAGE);
+            if (Main.authScreen != null) {
+                Main.authScreen.setVisible(false);
+                Main.authScreen.dispose();
+            }
+            if (Main.chatScreen != null) {
+                Main.chatScreen.setVisible(false);
+                Main.chatScreen.dispose();
+            }
+        }
     }
 
     public void shutdown() {

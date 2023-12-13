@@ -58,6 +58,12 @@ public class ConnectionHandler implements Runnable {
                         }
                         break;
                     }
+                    case "/logout": {
+                        Server.broadcast("/user_offline " + client.getUsername(), client.getUsername());
+                        this.sendLine("/logout_success");
+                        client.setUsername(null);
+                        break;
+                    }
                     case "/register": {
                         String username = this.recvLine().strip();
                         String password = this.recvLine().strip();
@@ -82,7 +88,7 @@ public class ConnectionHandler implements Runnable {
                         String id = Database.saveChat(client.getUsername(), to, content, type);
                         if(id != null) {
                             for (ConnectionHandler ch : Server.connections) {
-                                if (ch.client != null && ch.client.getUsername().equals(to)) {
+                                if (ch.client != null && ch.client.getUsername().equals(to) && !ch.client.getUsername().equals(this.client.getUsername())) {
                                     ch.sendLine("/message_from");
                                     ch.sendLine(this.client.getUsername());
                                     ch.sendLine(content);
@@ -180,7 +186,7 @@ public class ConnectionHandler implements Runnable {
                         String filenameToDelete = null;
                         if((filenameToDelete = Database.getFileNameFromMessage(this.client.getUsername(), id)) != null ) {
                             File fileToDelete = new File(filenameToDelete);
-                            if(fileToDelete.delete() && Database.removeFile(this.client.getUsername(), id)) {
+                            if((!fileToDelete.exists() || fileToDelete.isDirectory() || fileToDelete.delete()) && Database.removeFile(this.client.getUsername(), id)) {
                                 for (ConnectionHandler ch : Server.connections) {
                                     if (ch.client != null && ch.client.getUsername().equals(chatUser)) {
                                         ch.sendLine("/remove_message");
@@ -203,7 +209,7 @@ public class ConnectionHandler implements Runnable {
 
                         if((filenameToDelete = Database.getFileNameFromMessage(this.client.getUsername(), id)) != null ) {
                             File fileToDelete = new File(filenameToDelete);
-                            if(fileToDelete.delete() && Database.removeFile(this.client.getUsername(), id)) {
+                            if((!fileToDelete.exists() || fileToDelete.isDirectory() || fileToDelete.delete()) && Database.removeFile(this.client.getUsername(), id)) {
                                 ArrayList<String> usersInGroup = Database.getUsersFromGroup(group_id);
                                 for (ConnectionHandler ch : Server.connections) {
                                     if (ch.client != null && usersInGroup.contains(ch.client.getUsername())) {
