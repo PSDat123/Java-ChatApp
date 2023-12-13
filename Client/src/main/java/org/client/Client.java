@@ -1,5 +1,6 @@
 package org.client;
 
+import org.client.components.Group;
 import org.client.components.User;
 
 import javax.swing.*;
@@ -94,14 +95,25 @@ public class Client implements Runnable {
                     String content = in.readLine().strip();
                     String id = in.readLine().strip();
                     String type = in.readLine().strip();
-
-                    User user = Main.chatScreen.getUserComp(username);
-                    if (user != null && user.getInitializedStatus()) {
-                        user.addToChatLog(username, content, id, type);
-                        if (username.equals(Main.chatScreen.getCurrentChatUser())) {
-                            Main.chatScreen.addMessage(username, content, id, type);
+                    if (!type.startsWith("group")) {
+                        User user = Main.chatScreen.getUserComp(username);
+                        if (user != null && user.getInitializedStatus()) {
+                            user.addToChatLog(username, content, id, type);
+                            if (username.equals(Main.chatScreen.getCurrentChatUser())) {
+                                Main.chatScreen.addMessage(username, content, id, type);
+                            }
+                        }
+                    } else {
+                        Group group = Main.chatScreen.getGroupComp(username);
+                        String chatUser = in.readLine().strip();
+                        if (group != null && group.getInitializedStatus()) {
+                            group.addToChatLog(chatUser, content, id, type);
+                            if (username.equals(Main.chatScreen.getCurrentChatGroup())) {
+                                Main.chatScreen.addMessage(chatUser, content, id, type);
+                            }
                         }
                     }
+
                 }
                 else if (inMsg.startsWith("/chat_log")) {
                     String username = in.readLine().strip();
@@ -130,7 +142,9 @@ public class Client implements Runnable {
                     if (user != null && user.getInitializedStatus()) {
                         user.addToChatLog(Main.chatScreen.getUsername(), content, id, type);
                     }
-                    Main.chatScreen.addMessage(Main.chatScreen.getUsername(), content, id, type);
+                    if (username.equals(Main.chatScreen.getCurrentChatUser())) {
+                        Main.chatScreen.addMessage(Main.chatScreen.getUsername(), content, id, type);
+                    }
                 }
                 else if (inMsg.startsWith("/new_user")) {
                     String[] split = inMsg.split(" ", 2);
@@ -144,6 +158,19 @@ public class Client implements Runnable {
                     User user = Main.chatScreen.getUserComp(chatUser);
                     if (user != null) {
                         user.removeFromChatLog(id);
+                    }
+                    if (chatUser.equals(Main.chatScreen.getCurrentChatUser())) {
+                        Main.chatScreen.updateMsgList(false);
+                    }
+                }
+                else if (inMsg.startsWith("/remove_group_message")) {
+                    String group_id = in.readLine().strip();
+                    String id = in.readLine().strip();
+                    Group group = Main.chatScreen.getGroupComp(group_id);
+                    if (group != null) {
+                        group.removeFromChatLog(id);
+                    }
+                    if (group_id.equals(Main.chatScreen.getCurrentChatGroup())) {
                         Main.chatScreen.updateMsgList(false);
                     }
                 }
@@ -202,6 +229,24 @@ public class Client implements Runnable {
                         group.add(in.readLine().strip());
                     }
                     Main.chatScreen.addGroup(group);
+                }
+                else if (inMsg.startsWith("/group_chat_log")) {
+                    String group_id = in.readLine().strip();
+                    int n = Integer.parseInt(in.readLine().strip());
+                    Group group = Main.chatScreen.getGroupComp(group_id);
+                    if (group != null) {
+                        for (int i = 0; i < n; ++i) {
+                            String from = in.readLine().strip();
+                            String content = in.readLine().strip();
+                            String id = in.readLine().strip();
+                            String type = in.readLine().strip();
+                            group.addToChatLog(from, content, id, type);
+                        }
+
+                        if (group_id.equals(Main.chatScreen.getCurrentChatGroup())) {
+                            Main.chatScreen.updateMsgList();
+                        }
+                    }
                 }
                 System.out.println(inMsg);
             }

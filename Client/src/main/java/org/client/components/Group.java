@@ -33,21 +33,23 @@ public class Group extends JButton {
         addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-//                if (!initialized_chat ) {
-//                    initialized_chat = true;
-//                    Main.chatScreen.clearMessageList();
-//                    Main.client.sendLine("/get_chat_log_from");
-//                    Main.client.sendLine(username);
-//                }
-//                else {
-//                    if (!Main.chatScreen.getCurrentChatUser().equals(username)) {
-//                        Main.chatScreen.clearMessageList();
-//                        Main.chatScreen.setCurrentChatUser(username);
-//                        Main.chatScreen.updateMsgList();
-//                    }
-//                }
-//                Main.chatScreen.setCurrentChatUser(username);
-//                Main.chatScreen.setTitle(Main.chatScreen.getOriginalTitle() + " - Texting " + username);
+                if (!initialized_chat) {
+                    initialized_chat = true;
+                    Main.chatScreen.clearMessageList();
+                    Main.client.sendLine("/get_group_chat_log_from");
+                    Main.client.sendLine(id);
+                }
+                else {
+                    if (Main.chatScreen.getCurrentChatGroup() == null || !Main.chatScreen.getCurrentChatGroup().equals(id)) {
+                        Main.chatScreen.clearMessageList();
+                        Main.chatScreen.setCurrentChatGroup(id);
+                        Main.chatScreen.setCurrentChatUser(null);
+                        Main.chatScreen.updateMsgList();
+                    }
+                }
+                Main.chatScreen.setCurrentChatGroup(id);
+                Main.chatScreen.setCurrentChatUser(null);
+                Main.chatScreen.setTitle(Main.chatScreen.getOriginalTitle() + " - Texting " + name);
             }
         });
     }

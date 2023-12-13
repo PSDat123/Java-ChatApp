@@ -23,12 +23,14 @@ public class Message extends JButton {
     public String username;
     public String id;
     public String content;
+    public String type;
     public ArrayList<ArrayList<String>> chatLog;
     public Message(String username, String content, String id, String type) {
         this.chatLog = new ArrayList<>();
         this.username = username;
         this.id = id;
         this.content = content;
+        this.type = type;
         color = Color.WHITE;
         colorOver = Color.WHITE;
         colorClick = Color.GRAY;
@@ -37,7 +39,7 @@ public class Message extends JButton {
         this.setContentAreaFilled(false);
         this.setBorderPainted(false);
         String[] split;
-        if (type.equals("file") && (split = content.split("\\|", 2)).length == 2) {
+        if ((type.equals("file") || type.equals("group_file")) && (split = content.split("\\|", 2)).length == 2) {
             String serverFileName = split[0];
             String orgFilename = split[1];
             String wrapped = WordUtils.wrap(orgFilename, 30, "\n", true);
@@ -50,9 +52,15 @@ public class Message extends JButton {
                     if (username.equals(Main.chatScreen.getUsername())) {
                         int input = JOptionPane.showOptionDialog(Main.chatScreen.getContentPane(), "Bạn có muốn xoá tin nhắn này?", "Xoá tin nhắn", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
                         if (input == 0) {
-                            Main.client.sendLine("/remove_file");
-                            Main.client.sendLine(id);
-                            Main.client.sendLine(Main.chatScreen.getCurrentChatUser());
+                            if (type.equals("group_file") && Main.chatScreen.getCurrentChatGroup() != null) {
+                                Main.client.sendLine("/remove_group_file");
+                                Main.client.sendLine(id);
+                                Main.client.sendLine(Main.chatScreen.getCurrentChatGroup());
+                            } else {
+                                Main.client.sendLine("/remove_file");
+                                Main.client.sendLine(id);
+                                Main.client.sendLine(Main.chatScreen.getCurrentChatUser());
+                            }
                         }
                     }
                     else {
@@ -75,9 +83,16 @@ public class Message extends JButton {
                     if (username.equals(Main.chatScreen.getUsername())) {
                         int input = JOptionPane.showOptionDialog(Main.chatScreen.getContentPane(), "Bạn có muốn xoá tin nhắn này?", "Xoá tin nhắn", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
                         if (input == 0) {
-                            Main.client.sendLine("/remove_message");
-                            Main.client.sendLine(id);
-                            Main.client.sendLine(Main.chatScreen.getCurrentChatUser());
+                            if (type.equals("group_text")) {
+                                Main.client.sendLine("/remove_group_message");
+                                Main.client.sendLine(id);
+                                Main.client.sendLine(Main.chatScreen.getCurrentChatGroup());
+                            }
+                            else {
+                                Main.client.sendLine("/remove_message");
+                                Main.client.sendLine(id);
+                                Main.client.sendLine(Main.chatScreen.getCurrentChatUser());
+                            }
                         }
                     }
                 }

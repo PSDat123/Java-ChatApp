@@ -159,6 +159,21 @@ public class ConnectionHandler implements Runnable {
                         }
                         break;
                     }
+                    case "/remove_group_message": {
+                        String id = this.recvLine().strip();
+                        String group_id = this.recvLine().strip();
+                        ArrayList<String> usersInGroup = Database.getUsersFromGroup(group_id);
+                        if(Database.removeMessage(this.client.getUsername(), id)) {
+                            for (ConnectionHandler ch : Server.connections) {
+                                if (ch.client != null && usersInGroup.contains(ch.client.getUsername())) {
+                                    ch.sendLine("/remove_group_message");
+                                    ch.sendLine(group_id);
+                                    ch.sendLine(id);
+                                }
+                            }
+                        }
+                        break;
+                    }
                     case "/remove_file": {
                         String id = this.recvLine().strip();
                         String chatUser = this.recvLine().strip();
@@ -177,6 +192,29 @@ public class ConnectionHandler implements Runnable {
                                 this.sendLine("/remove_message");
                                 this.sendLine(chatUser);
                                 this.sendLine(id);
+                            }
+                        }
+                        break;
+                    }
+                    case "/remove_group_file": {
+                        String id = this.recvLine().strip();
+                        String group_id = this.recvLine().strip();
+                        String filenameToDelete = null;
+
+                        if((filenameToDelete = Database.getFileNameFromMessage(this.client.getUsername(), id)) != null ) {
+                            File fileToDelete = new File(filenameToDelete);
+                            if(fileToDelete.delete() && Database.removeFile(this.client.getUsername(), id)) {
+                                ArrayList<String> usersInGroup = Database.getUsersFromGroup(group_id);
+                                for (ConnectionHandler ch : Server.connections) {
+                                    if (ch.client != null && usersInGroup.contains(ch.client.getUsername())) {
+                                        ch.sendLine("/remove_group_message");
+                                        ch.sendLine(group_id);
+                                        ch.sendLine(id);
+                                    }
+                                }
+//                                this.sendLine("/remove_message");
+//                                this.sendLine(chatUser);
+//                                this.sendLine(id);
                             }
                         }
                         break;
@@ -214,6 +252,35 @@ public class ConnectionHandler implements Runnable {
                         }
                         break;
                     }
+                    case "/send_group_file": {
+                        String to = this.recvLine().strip();
+                        String orgFileName = this.recvLine().strip();
+                        String ext = FilenameUtils.getExtension(orgFileName);
+                        String filename = UUID.randomUUID().toString() + '.' + ext;
+                        String filepath = "assets/" + filename;
+                        recvFile(filepath);
+
+                        String content = filepath + "|" + orgFileName;
+                        String type = "group_file";
+                        String id = Database.saveChat(client.getUsername(), to, content, type);
+                        ArrayList<String> usersInGroup = Database.getUsersFromGroup(to);
+                        if(id != null) {
+                            for (ConnectionHandler ch : Server.connections) {
+                                if (ch.client != null && usersInGroup.contains(ch.client.getUsername())) {
+                                    ch.sendLine("/message_from");
+                                    ch.sendLine(to);
+                                    ch.sendLine(content);
+                                    ch.sendLine(id);
+                                    ch.sendLine(type);
+                                    ch.sendLine(this.client.getUsername());
+                                }
+                            }
+                        }
+                        else {
+                            sendLine("/error_chat Không thể gửi file!");
+                        }
+                        break;
+                    }
                     case "/download_file": {
                         String serverFileName = this.recvLine().strip();
                         String orgFileName = this.recvLine().strip();
@@ -226,6 +293,7 @@ public class ConnectionHandler implements Runnable {
                             this.sendLine("/download_error");
                             this.sendLine("File không còn tồn tại trên server!");
                         }
+                        break;
                     }
                     case "/create_group": {
                         String name = this.recvLine().strip();
@@ -248,8 +316,8 @@ public class ConnectionHandler implements Runnable {
                                     }
                                 }
                             }
-
                         }
+                        break;
                     }
                     case "/get_groups": {
                         String username = in.readLine().strip();
@@ -267,6 +335,51 @@ public class ConnectionHandler implements Runnable {
                         }
                         break;
                     }
+                    case "/group_chat": {
+                        String to = this.recvLine().strip();
+                        String content = this.recvLine().strip();
+                        String type = "group_text";
+                        String id = Database.saveChat(client.getUsername(), to, content, type);
+                        if(id != null) {
+                            ArrayList<String> usersInGroup = Database.getUsersFromGroup(to);
+                            for (ConnectionHandler ch : Server.connections) {
+                                if (ch.client != null && usersInGroup.contains(ch.client.getUsername())) {
+                                    ch.sendLine("/message_from");
+                                    ch.sendLine(to);
+                                    ch.sendLine(content);
+                                    ch.sendLine(id);
+                                    ch.sendLine(type);
+                                    ch.sendLine(this.client.getUsername());
+                                }
+                            }
+//                            sendLine("/chat_success");
+//                            sendLine(to);
+//                            sendLine(content);
+//                            sendLine(id);
+//                            sendLine(type);
+                        }
+                        else {
+                            sendLine("/error_chat Không thể gửi tin nhắn!");
+                        }
+                        break;
+                    }
+                    case "/get_group_chat_log_from": {
+                        String id = in.readLine().strip();
+                        ArrayList<ArrayList<String>> logs = Database.getGroupChatLog(id);
+                        if (logs != null && !logs.isEmpty()) {
+                            this.sendLine("/group_chat_log");
+                            this.sendLine(id);
+                            this.sendLine(Integer.toString(logs.size()));
+                            for (ArrayList<String> log : logs) {
+                                this.sendLine(log.get(0)); // from
+                                this.sendLine(log.get(1)); // content
+                                this.sendLine(log.get(2)); // id
+                                this.sendLine(log.get(3)); // type
+                            }
+                        }
+                        break;
+                    }
+
                 }
             }
         } catch (Exception e) {

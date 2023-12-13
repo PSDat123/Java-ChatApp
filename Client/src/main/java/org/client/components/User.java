@@ -32,12 +32,14 @@ public class User extends JButton {
                     Main.client.sendLine(username);
                 }
                 else {
-                    if (!Main.chatScreen.getCurrentChatUser().equals(username)) {
+                    if (Main.chatScreen.getCurrentChatUser() == null || !username.equals(Main.chatScreen.getCurrentChatUser())) {
                         Main.chatScreen.clearMessageList();
+                        Main.chatScreen.setCurrentChatGroup(null);
                         Main.chatScreen.setCurrentChatUser(username);
                         Main.chatScreen.updateMsgList();
                     }
                 }
+                Main.chatScreen.setCurrentChatGroup(null);
                 Main.chatScreen.setCurrentChatUser(username);
                 Main.chatScreen.setTitle(Main.chatScreen.getOriginalTitle() + " - Texting " + username);
             }

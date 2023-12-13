@@ -4,14 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9257d912-54ef-45cf-9adf-632de24b544d" name="Changes" comment="Add delete history &amp;&amp; update UI">
-      <change afterPath="$PROJECT_DIR$/Client/src/main/java/org/client/components/AddGroupModal.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Client/src/main/java/org/client/components/Group.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Client/src/main/resources/download.png" afterDir="false" />
+    <list default="true" id="9257d912-54ef-45cf-9adf-632de24b544d" name="Changes" comment="Finished file upload and added groups selection and creation">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/main/java/org/client/ChatScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/org/client/ChatScreen.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/main/java/org/client/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/org/client/Client.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/main/java/org/client/components/FileButton.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/org/client/components/FileButton.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/java/org/client/components/Group.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/org/client/components/Group.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/main/java/org/client/components/Message.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/org/client/components/Message.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/main/java/org/client/components/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/org/client/components/User.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Server/src/main/java/org/server/ConnectionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/org/server/ConnectionHandler.java" afterDir="false" />
@@ -83,7 +81,7 @@
       <recent name="C:\Users\LENOVO\Uni\Nam 3\HK1\Java\Project\ChatApp\Server\src\main\java" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Client1">
+  <component name="RunManager" selected="Application.Client3">
     <configuration name="Client1" type="Application" factoryName="Application">
       <option name="ALTERNATIVE_JRE_PATH" value="18" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
@@ -178,7 +176,15 @@
       <option name="project" value="LOCAL" />
       <updated>1702306327949</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Finished file upload and added groups selection and creation">
+      <option name="closed" value="true" />
+      <created>1702397853657</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1702397853657</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -188,7 +194,8 @@
     <MESSAGE value="Add maven and database" />
     <MESSAGE value="Update UI and socket management" />
     <MESSAGE value="Add delete history &amp;&amp; update UI" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add delete history &amp;&amp; update UI" />
+    <MESSAGE value="Finished file upload and added groups selection and creation" />
+    <option name="LAST_COMMIT_MESSAGE" value="Finished file upload and added groups selection and creation" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

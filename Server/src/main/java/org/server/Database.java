@@ -96,8 +96,12 @@ public class Database {
         Document doc = userCollection.find(eq("username", username)).first();
         return doc != null;
     }
+    public static boolean groupExists(String id) {
+        Document doc = groupCollection.find(eq("_id", new ObjectId(id))).first();
+        return doc != null;
+    }
     public static String saveChat(String from, String to, String content, String type) {
-        if (!userExists(to)) return null;
+        if (!userExists(to) && !groupExists(to)) return null;
         Document newChat = new Document().append("type", type).append("from", from).append("to", to).append("content", content);
         InsertOneResult result = chatCollection.insertOne(newChat);
         BsonObjectId bson_id = (BsonObjectId) result.getInsertedId();
@@ -106,11 +110,30 @@ public class Database {
         }
         return bson_id.getValue().toString();
     }
-
     public static ArrayList<ArrayList<String>> getChatLog(String self, String other) {
         if (!userExists(other)) return null;
         ArrayList<ArrayList<String>> logs = new ArrayList<>();
-        try(MongoCursor<Document> cursor = chatCollection.find(or(and(eq("from", self), eq("to", other)), and(eq("from", other), eq("to", self))))
+        Bson filter = and(or(and(eq("from", self), eq("to", other)), and(eq("from", other), eq("to", self))), or(eq("type", "text"), eq("type", "file")));
+        try(MongoCursor<Document> cursor = chatCollection.find(filter)
+                .iterator())
+        {
+            while(cursor.hasNext()) {
+                BsonDocument doc = cursor.next().toBsonDocument();
+                BsonObjectId bson_id = (BsonObjectId) doc.get("_id");
+                String id = bson_id.getValue().toString();
+                String from = doc.get("from").asString().getValue();
+                String content = doc.get("content").asString().getValue();
+                String type = doc.get("type").asString().getValue();
+                logs.add(new ArrayList<>(List.of(from, content, id, type)));
+            }
+        }
+        return logs;
+    }
+    public static ArrayList<ArrayList<String>> getGroupChatLog(String group_id) {
+        if (!groupExists(group_id)) return null;
+        ArrayList<ArrayList<String>> logs = new ArrayList<>();
+        Bson filter = and(eq("to", group_id), or(eq("type", "group_text"), eq("type", "group_file")));
+        try(MongoCursor<Document> cursor = chatCollection.find(filter)
                 .iterator())
         {
             while(cursor.hasNext()) {
@@ -130,14 +153,14 @@ public class Database {
         return delResult.getDeletedCount() == 1;
     }
     public static String getFileNameFromMessage(String username, String id) {
-        Bson filter = and(eq("_id", new ObjectId(id)), eq("from", username), eq("type", "file"));
+        Bson filter = and(eq("_id", new ObjectId(id)), eq("from", username), or(eq("type", "file"), eq("type", "group_file")));
         Document user = chatCollection.find(filter).first();
         if (user == null) return null;
         return user.getString("content").split("\\|")[0];
     }
 
     public static boolean removeFile(String username, String id) {
-        Bson filter = and(eq("_id", new ObjectId(id)), eq("from", username), eq("type", "file"));
+        Bson filter = and(eq("_id", new ObjectId(id)), eq("from", username), or(eq("type", "file"), eq("type", "group_file")));
         DeleteResult delResult = chatCollection.deleteOne(filter);
         return delResult.getDeletedCount() == 1;
     }
@@ -176,5 +199,22 @@ public class Database {
             }
         }
         return groups;
+    }
+
+    public static ArrayList<String> getUsersFromGroup(String id) {
+        ArrayList<String> users = new ArrayList<>();
+        Bson filter = eq("_id", new ObjectId(id));
+        try(MongoCursor<Document> cursor = groupCollection.find(filter)
+                .iterator())
+        {
+            while(cursor.hasNext()) {
+                BsonDocument doc = cursor.next().toBsonDocument();
+                List<BsonValue> userList = doc.getArray("users").getValues();
+                for (BsonValue user : userList) {
+                    users.add(user.asString().getValue());
+                }
+            }
+        }
+        return users;
     }
 }

@@ -42,6 +42,7 @@ public class ChatScreen extends JFrame implements ActionListener {
     private HashMap<String, User> userMap;
     private HashMap<String, Group> groupMap;
     private String currentChatUser;
+    private String currentChatGroup;
     private String previousUser;
     private int currentLine = 0;
     private String originalTitle;
@@ -241,6 +242,11 @@ public class ChatScreen extends JFrame implements ActionListener {
                     Main.client.sendLine("/chat");
                     Main.client.sendLine(currentChatUser);
                     Main.client.sendLine(content);
+                } else if (currentChatGroup != null) {
+                    String content = textField.getText();
+                    Main.client.sendLine("/group_chat");
+                    Main.client.sendLine(currentChatGroup);
+                    Main.client.sendLine(content);
                 }
                 break;
             }
@@ -347,7 +353,14 @@ public class ChatScreen extends JFrame implements ActionListener {
     public void updateMsgList(boolean scrollToBottom) {
         int currentScroll = messageScrollPane.getVerticalScrollBar().getValue();
         clearMessageList();
-        ArrayList<ArrayList<String>> chatLog = userMap.get(currentChatUser).getChatLog();
+        ArrayList<ArrayList<String>> chatLog;
+        if (currentChatUser != null) {
+            chatLog = userMap.get(currentChatUser).getChatLog();
+        } else if (currentChatGroup != null) {
+            chatLog = groupMap.get(currentChatGroup).getChatLog();
+        } else {
+            chatLog = new ArrayList<>();
+        }
         GridBagConstraints tmpGBC = new GridBagConstraints();
         tmpGBC.gridheight = 1;
         currentLine = 0;
@@ -423,6 +436,9 @@ public class ChatScreen extends JFrame implements ActionListener {
     }
     public User getUserComp(String username) {
         return userMap.get(username);
+    }
+    public Group getGroupComp(String id) {
+        return groupMap.get(id);
     }
     public String getOriginalTitle() { return originalTitle; }
 
@@ -506,6 +522,12 @@ public class ChatScreen extends JFrame implements ActionListener {
     }
     public void setCurrentChatUser(String username) {
         currentChatUser = username;
+    }
+    public String getCurrentChatGroup() {
+        return currentChatGroup;
+    }
+    public void setCurrentChatGroup(String id) {
+        currentChatGroup = id;
     }
     public ArrayList<String> getUserListExceptSelf() {
         ArrayList<String> users = new ArrayList<>(userMap.keySet());

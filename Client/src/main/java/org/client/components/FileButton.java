@@ -21,15 +21,22 @@ public class FileButton extends JButton {
         addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (Main.chatScreen.getCurrentChatUser() != null) {
+                if (Main.chatScreen.getCurrentChatUser() != null || Main.chatScreen.getCurrentChatGroup() != null) {
                     int choice = fc.showOpenDialog(Main.chatScreen.getContentPane());
                     if (choice == JFileChooser.APPROVE_OPTION) {
                         try {
                             File f = fc.getSelectedFile();
-                            Main.client.sendLine("/send_file");
-                            Main.client.sendLine(Main.chatScreen.getCurrentChatUser());
-                            Main.client.sendLine(f.getName());
-                            Main.client.sendFile(f);
+                            if (Main.chatScreen.getCurrentChatUser() != null) {
+                                Main.client.sendLine("/send_file");
+                                Main.client.sendLine(Main.chatScreen.getCurrentChatUser());
+                                Main.client.sendLine(f.getName());
+                                Main.client.sendFile(f);
+                            } else if (Main.chatScreen.getCurrentChatGroup() != null) {
+                                Main.client.sendLine("/send_group_file");
+                                Main.client.sendLine(Main.chatScreen.getCurrentChatGroup());
+                                Main.client.sendLine(f.getName());
+                                Main.client.sendFile(f);
+                            }
                         } catch (Exception ex) {
                             JOptionPane.showMessageDialog(Main.chatScreen.getContentPane(), "Đã xảy ra lỗi khi gửi file!","Lỗi", JOptionPane.ERROR_MESSAGE);
                         }
