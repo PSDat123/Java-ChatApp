@@ -66,13 +66,13 @@ public class Server implements Runnable {
         }
     }
 
-    public static void main(String[] args) {
-        try {
-            Database.init();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        Server server = new Server(8080);
-        server.run();
-    }
+//    public static void main(String[] args) {
+//        try {
+//            Database.init();
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
+//        Server server = new Server(8080);
+//        server.run();
+//    }
 }

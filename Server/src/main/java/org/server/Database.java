@@ -42,7 +42,13 @@ public class Database {
             throw new RuntimeException(e);
         }
     }
-
+    public static void shutdown() {
+        try {
+            mongoClient.close();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
     public static boolean registerUser(String username, String password) throws NoSuchAlgorithmException {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");

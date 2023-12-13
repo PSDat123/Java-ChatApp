@@ -4,16 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9257d912-54ef-45cf-9adf-632de24b544d" name="Changes" comment="Finished file upload and added groups selection and creation">
+    <list default="true" id="9257d912-54ef-45cf-9adf-632de24b544d" name="Changes" comment="Finish group chatting">
+      <change afterPath="$PROJECT_DIR$/Server/src/main/java/org/server/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/main/java/org/client/ChatScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/org/client/ChatScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Client/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/main/java/org/client/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/org/client/Client.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/main/java/org/client/components/FileButton.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/org/client/components/FileButton.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/main/java/org/client/components/Group.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/org/client/components/Group.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/main/java/org/client/components/Message.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/org/client/components/Message.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/main/java/org/client/components/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/org/client/components/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/org/server/ConnectionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/org/server/ConnectionHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Server/src/main/java/org/server/Database.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/org/server/Database.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/src/main/java/org/server/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/org/server/Server.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -81,7 +78,7 @@
       <recent name="C:\Users\LENOVO\Uni\Nam 3\HK1\Java\Project\ChatApp\Server\src\main\java" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Client3">
+  <component name="RunManager" selected="Application.Client1">
     <configuration name="Client1" type="Application" factoryName="Application">
       <option name="ALTERNATIVE_JRE_PATH" value="18" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
@@ -119,7 +116,7 @@
               <list>
                 <option value="compile" />
                 <option value="exec:java" />
-                <option value="-Dexec.mainClass=org.server.Server" />
+                <option value="-Dexec.mainClass=org.server.Main" />
               </list>
             </option>
             <option name="pomFileName" />
@@ -184,7 +181,15 @@
       <option name="project" value="LOCAL" />
       <updated>1702397853657</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Finish group chatting">
+      <option name="closed" value="true" />
+      <created>1702457104986</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1702457104986</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -195,7 +200,8 @@
     <MESSAGE value="Update UI and socket management" />
     <MESSAGE value="Add delete history &amp;&amp; update UI" />
     <MESSAGE value="Finished file upload and added groups selection and creation" />
-    <option name="LAST_COMMIT_MESSAGE" value="Finished file upload and added groups selection and creation" />
+    <MESSAGE value="Finish group chatting" />
+    <option name="LAST_COMMIT_MESSAGE" value="Finish group chatting" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

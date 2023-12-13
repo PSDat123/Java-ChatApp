@@ -17,7 +17,6 @@ public class Client implements Runnable {
     private DataInputStream fin;
     private boolean done = false;
 
-
     @Override
     public void run() {
         try {
@@ -26,9 +25,6 @@ public class Client implements Runnable {
             in = new BufferedReader(new InputStreamReader(client.getInputStream()));
             fout = new DataOutputStream(client.getOutputStream());
             fin = new DataInputStream(client.getInputStream());
-//            InputHandler inHandler = new InputHandler();
-//            Thread t = new Thread(inHandler);
-//            t.start();
 
             String inMsg;
             while ((inMsg = in.readLine()) != null) {
