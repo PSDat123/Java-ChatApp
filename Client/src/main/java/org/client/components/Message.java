@@ -35,7 +35,9 @@ public class Message extends JButton {
         colorOver = Color.WHITE;
         colorClick = Color.GRAY;
         borderColor = Color.WHITE;
+
         setBackground(color);
+        setBorder(BorderFactory.createMatteBorder(8, 16, 8, 16, Color.WHITE));
         this.setContentAreaFilled(false);
         this.setBorderPainted(false);
         String[] split;

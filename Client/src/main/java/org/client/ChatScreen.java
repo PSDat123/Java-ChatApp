@@ -359,7 +359,7 @@ public class ChatScreen extends JFrame implements ActionListener {
         tmpGBC2.weightx = 0;
         tmpGBC2.gridx = left ? 0 : 1;
         Message msg = new Message(from, content, id, type);
-        msg.setHorizontalAlignment(left ? SwingConstants.LEFT: SwingConstants.RIGHT);
+//        msg.setHorizontalAlignment(left ? SwingConstants.LEFT: SwingConstants.RIGHT);
         messageContainer.add(msg, tmpGBC2);
         tmpGBC2.weightx = 1.0;
         tmpGBC2.gridx = left ? 1 : 0;

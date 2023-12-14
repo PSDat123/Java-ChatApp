@@ -4,17 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9257d912-54ef-45cf-9adf-632de24b544d" name="Changes" comment="Add GUI to server">
+    <list default="true" id="9257d912-54ef-45cf-9adf-632de24b544d" name="Changes" comment="Bug fixes and add error handling">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/main/java/org/client/AuthScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/org/client/AuthScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Client/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/main/java/org/client/ChatScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/org/client/ChatScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/main/java/org/client/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/org/client/Client.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/main/java/org/client/components/AddGroupModal.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/org/client/components/AddGroupModal.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/main/java/org/client/components/Group.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/org/client/components/Group.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/src/main/java/org/client/components/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/org/client/components/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/src/main/java/org/client/components/Message.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/org/client/components/Message.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Server/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Server/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/org/server/ConnectionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/org/server/ConnectionHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/org/server/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/org/server/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/src/main/java/org/server/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/org/server/Server.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -82,7 +79,7 @@
       <recent name="C:\Users\LENOVO\Uni\Nam 3\HK1\Java\Project\ChatApp\Server\src\main\java" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Client2">
+  <component name="RunManager" selected="Application.Client1">
     <configuration name="Client1" type="Application" factoryName="Application">
       <option name="ALTERNATIVE_JRE_PATH" value="18" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
@@ -201,7 +198,15 @@
       <option name="project" value="LOCAL" />
       <updated>1702473560073</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Bug fixes and add error handling">
+      <option name="closed" value="true" />
+      <created>1702485290523</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1702485290523</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -214,7 +219,8 @@
     <MESSAGE value="Finished file upload and added groups selection and creation" />
     <MESSAGE value="Finish group chatting" />
     <MESSAGE value="Add GUI to server" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add GUI to server" />
+    <MESSAGE value="Bug fixes and add error handling" />
+    <option name="LAST_COMMIT_MESSAGE" value="Bug fixes and add error handling" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -223,6 +229,11 @@
           <url>file://$PROJECT_DIR$/src/main/java/org/example/Main.java</url>
           <line>15</line>
           <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/Server/src/main/java/org/server/ConnectionHandler.java</url>
+          <line>406</line>
+          <option name="timeStamp" value="3" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
