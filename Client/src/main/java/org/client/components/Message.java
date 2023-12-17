@@ -24,13 +24,15 @@ public class Message extends JButton {
     public String id;
     public String content;
     public String type;
+    public String align;
     public ArrayList<ArrayList<String>> chatLog;
-    public Message(String username, String content, String id, String type) {
+    public Message(String username, String content, String id, String type, boolean alignLeft) {
         this.chatLog = new ArrayList<>();
         this.username = username;
         this.id = id;
         this.content = content;
         this.type = type;
+        this.align = alignLeft ? "left" : "right";
         color = Color.WHITE;
         colorOver = Color.WHITE;
         colorClick = Color.GRAY;
@@ -46,7 +48,7 @@ public class Message extends JButton {
             String orgFilename = split[1];
             String wrapped = WordUtils.wrap(orgFilename, 30, "\n", true);
             this.setIcon(fetchIcon());
-            this.setText("<html>" + wrapped.replaceAll("\\n", "<br>") + "</html>");
+            this.setText("<html><div align=" + this.align + ">" + wrapped.replaceAll("\\n", "<br>") + "</div></html>");
             addActionListener(new ActionListener() {
                 final Object[] options = {"Có", "Không"};
                 @Override
@@ -77,7 +79,8 @@ public class Message extends JButton {
             });
         } else {
             String wrapped = WordUtils.wrap(content, 30, "\n", true);
-            this.setText("<html>" + wrapped.replaceAll("\\n", "<br>") + "</html>");
+
+            this.setText("<html><div align=" + this.align + ">" + wrapped.replaceAll("\\n", "<br>") + "</div></html>");
             addActionListener(new ActionListener() {
                 final Object[] options = {"Có", "Không"};
                 @Override

@@ -4,13 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9257d912-54ef-45cf-9adf-632de24b544d" name="Changes" comment="Bug fixes and add error handling">
+    <list default="true" id="9257d912-54ef-45cf-9adf-632de24b544d" name="Changes" comment="Fixes UI">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Client/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/main/java/org/client/ChatScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/org/client/ChatScreen.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/src/main/java/org/client/components/Message.java" beforeDir="false" afterPath="$PROJECT_DIR$/Client/src/main/java/org/client/components/Message.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Server/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Server/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server/src/main/java/org/server/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/src/main/java/org/server/Server.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -206,7 +205,15 @@
       <option name="project" value="LOCAL" />
       <updated>1702485290523</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Fixes UI">
+      <option name="closed" value="true" />
+      <created>1702559008183</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1702559008183</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -220,7 +227,8 @@
     <MESSAGE value="Finish group chatting" />
     <MESSAGE value="Add GUI to server" />
     <MESSAGE value="Bug fixes and add error handling" />
-    <option name="LAST_COMMIT_MESSAGE" value="Bug fixes and add error handling" />
+    <MESSAGE value="Fixes UI" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixes UI" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
