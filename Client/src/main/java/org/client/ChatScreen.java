@@ -212,7 +212,7 @@ public class ChatScreen extends JFrame implements ActionListener {
         mainGBC.gridx = 0;
         mainGBC.gridy = 6;
         mainGBC.gridwidth = 2;
-        JButton logoutBtn = new JButton("Logout");
+        JButton logoutBtn = new JButton("Đăng xuất");
         add(logoutBtn, mainGBC);
 
         logoutBtn.addActionListener(new ActionListener() {
@@ -221,13 +221,6 @@ public class ChatScreen extends JFrame implements ActionListener {
                 Main.client.sendLine("/logout");
             }
         });
-
-        setSize(700, 500);
-//        setResizable(false);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
-//        pack();
-        setVisible(true);
 
         addWindowListener(new WindowAdapter() {
             @Override
@@ -247,6 +240,12 @@ public class ChatScreen extends JFrame implements ActionListener {
             }
         });
 
+        setSize(700, 500);
+//        setResizable(false);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+//        pack();
+        setVisible(true);
     }
 
     @Override

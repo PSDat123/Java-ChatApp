@@ -251,7 +251,7 @@ public class Client implements Runnable {
                     Main.chatScreen = null;
                     Main.authScreen = new AuthScreen();
                 }
-                System.out.println(inMsg);
+//                System.out.println(inMsg);
             }
         } catch (ConnectException e) {
             errorMessage = "Không thể kết nối với server, hãy khởi dộng server và chạy lại ứng dụng!";

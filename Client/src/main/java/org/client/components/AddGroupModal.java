@@ -72,12 +72,6 @@ public class AddGroupModal extends JDialog {
         ArrayList<String> users = Main.chatScreen.getUserListExceptSelf();
         userListModel.addAll(users);
 
-        pack();
-        setResizable(false);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setLocationRelativeTo(null);
-        setVisible(true);
-
         submitBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -99,5 +93,12 @@ public class AddGroupModal extends JDialog {
                 super.windowClosing(e);
             }
         });
+
+        pack();
+        setResizable(false);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
+        setVisible(true);
+
     }
 }

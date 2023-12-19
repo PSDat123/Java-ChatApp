@@ -44,6 +44,15 @@ public class ConnectionHandler implements Runnable {
                         String username = this.recvLine().strip();
                         String password = this.recvLine().strip();
                         try {
+                            boolean isOnline = false;
+                            for (ConnectionHandler ch : Server.connections) {
+                                if (ch.client != null && username.equals(ch.client.getUsername())) {
+                                    this.sendLine("/login_error Người dùng đã đăng nhập, vui lòng đăng xuất!");
+                                    isOnline = true;
+                                    break;
+                                }
+                            }
+                            if (isOnline) break;
                             boolean success = Database.loginUser(username, password);
                             if (!success) {
                                 this.sendLine("/login_error Tên đăng nhập hoặc mật khẩu sai!");
@@ -54,7 +63,7 @@ public class ConnectionHandler implements Runnable {
                                 Server.broadcast("/user_online " + username);
                             }
                         } catch (NoSuchAlgorithmException e) {
-                            this.sendLine("/login_error Lỗi hệ thống");
+                            this.sendLine("/login_error Lỗi hệ thống!");
                         }
                         break;
                     }
@@ -436,6 +445,8 @@ public class ConnectionHandler implements Runnable {
             fout.write(buffer, 0, bytes);
             fout.flush();
         }
+        out.flush();
+        fout.flush();
         fileInputStream.close();
     }
 
